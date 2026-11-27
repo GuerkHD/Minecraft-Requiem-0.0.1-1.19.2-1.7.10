@@ -120,7 +120,10 @@ public class TinkersCompat
     /** Same as a Guerk Nugget. */
     private static final FoodProperties SNACK = new FoodProperties.Builder().nutrition(1).saturationMod(0.3f).build();
 
-    private static final Map<EntityPlayer, Long> lastSnack = new WeakHashMap<EntityPlayer, Long>();
+    // One map per side: in singleplayer the client and server player are equal (Entity.equals compares the entity ID),
+    // so a shared map would let the client's cooldown block the server.
+    private static final Map<EntityPlayer, Long> lastSnackClient = new WeakHashMap<EntityPlayer, Long>();
+    private static final Map<EntityPlayer, Long> lastSnackServer = new WeakHashMap<EntityPlayer, Long>();
 
     /**
      * Whether sneak + right click with this stack should be a snack (cooldown not included).
@@ -139,6 +142,7 @@ public class TinkersCompat
      */
     public static boolean snackCooldownOver(EntityPlayer player)
     {
+        Map<EntityPlayer, Long> lastSnack = player.worldObj.isRemote ? lastSnackClient : lastSnackServer;
         long now = player.worldObj.getTotalWorldTime();
         Long last = lastSnack.get(player);
         if(last != null && now - last < SNACK_COOLDOWN && now >= last) return false;
