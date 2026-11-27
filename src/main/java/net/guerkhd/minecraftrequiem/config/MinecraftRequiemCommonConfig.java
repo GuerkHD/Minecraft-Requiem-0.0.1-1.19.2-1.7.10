@@ -11,6 +11,7 @@ public class MinecraftRequiemCommonConfig
     private static final String KILLER_QUEEN = "killer_queen_bombs";
     private static final String ORE = "guerk_ore_spawn";
     private static final String POTIONS = "potion_ids";
+    private static final String COMPAT = "mod_compatibility";
 
     private static final String[] BLOCK_INTERACTIONS = {"NONE", "BREAK", "DESTROY"};
 
@@ -38,6 +39,8 @@ public class MinecraftRequiemCommonConfig
     public static int EPITAPH_ID = 74;
     public static int CONSTIPATION_ID = 75;
     public static int LEVITATION_ID = 76;
+
+    public static int TINKERS_MATERIAL_ID = 218;
 
     public static void load(File file)
     {
@@ -77,6 +80,10 @@ public class MinecraftRequiemCommonConfig
         CONSTIPATION_ID = config.getInt("constipation", POTIONS, 75, 24, 127, "");
         LEVITATION_ID = config.getInt("levitation", POTIONS, 76, 24, 127,
                 "Levitation does not exist in 1.7.10, so C-Moon brings its own.");
+
+        config.setCategoryComment(COMPAT, "Settings for other mods");
+        TINKERS_MATERIAL_ID = config.getInt("tinkersMaterialId", COMPAT, 218, 0, 32767,
+                "Tinkers' Construct material ID for Guerk. Must be unique among all Tinkers materials and identical on client and server.");
 
         if(config.hasChanged()) config.save();
     }

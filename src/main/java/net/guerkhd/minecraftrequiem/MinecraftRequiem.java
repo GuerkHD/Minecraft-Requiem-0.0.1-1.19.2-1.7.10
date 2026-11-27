@@ -7,6 +7,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.guerkhd.minecraftrequiem.block.ModBlocks;
+import net.guerkhd.minecraftrequiem.compat.ModCompat;
 import net.guerkhd.minecraftrequiem.config.MinecraftRequiemCommonConfig;
 import net.guerkhd.minecraftrequiem.effect.ModEffects;
 import net.guerkhd.minecraftrequiem.entity.ModEntities;
@@ -23,7 +24,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
-@Mod(modid = MinecraftRequiem.MOD_ID, name = MinecraftRequiem.MOD_NAME, version = MinecraftRequiem.VERSION)
+@Mod(modid = MinecraftRequiem.MOD_ID, name = MinecraftRequiem.MOD_NAME, version = MinecraftRequiem.VERSION, dependencies = ModCompat.LOAD_AFTER)
 public class MinecraftRequiem
 {
     public static final String MOD_ID = "minecraftrequiem";
@@ -50,6 +51,8 @@ public class MinecraftRequiem
         ModEntities.register();
         ModMessages.register();
 
+        ModCompat.preInit();
+
         proxy.preInit(event);
     }
 
@@ -57,6 +60,7 @@ public class MinecraftRequiem
     public void init(FMLInitializationEvent event)
     {
         ModRecipes.register();
+        ModCompat.init();
         GameRegistry.registerWorldGenerator(new GuerkOreGenerator(), 0);
 
         MinecraftForge.EVENT_BUS.register(new ModEvents());

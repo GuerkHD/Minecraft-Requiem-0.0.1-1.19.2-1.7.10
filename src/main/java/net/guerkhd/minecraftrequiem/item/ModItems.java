@@ -4,9 +4,11 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.guerkhd.minecraftrequiem.MinecraftRequiem;
 import net.guerkhd.minecraftrequiem.food.FoodProperties;
 import net.guerkhd.minecraftrequiem.item.Custom.*;
+import net.guerkhd.minecraftrequiem.compat.TinkersCompat;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemSpade;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.potion.Potion;
 import net.minecraftforge.oredict.OreDictionary;
@@ -54,11 +56,21 @@ public class ModItems
         // 1.19 forge tags -> ore dictionary
         OreDictionary.registerOre("ingotGuerk", GUERK_INGOT);
         OreDictionary.registerOre("nuggetGuerk", GUERK_NUGGET);
+        // Raw Guerk is what crushers make out of the ore (2 per ore), so it takes the place of a dust.
+        OreDictionary.registerOre("dustGuerk", RAW_GUERK);
     }
 
     public static boolean isGuerkTool(Item item)
     {
         return item != null && (item == GUERK_SWORD || item == GUERK_PICKAXE || item == GUERK_AXE || item == GUERK_SHOVEL || item == GUERK_HOE);
+    }
+
+    /**
+     * Guerk tools and Tinkers' Construct tools with a Guerk head.
+     */
+    public static boolean hasFoodLeech(ItemStack stack)
+    {
+        return stack != null && (isGuerkTool(stack.getItem()) || TinkersCompat.isGuerkTool(stack));
     }
 
     private static Item register(String name, Item item)

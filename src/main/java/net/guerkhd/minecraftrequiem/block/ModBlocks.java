@@ -16,7 +16,8 @@ public class ModBlocks
     public static void register()
     {
         GUERK_BLOCK = registerBlock("guerk_block", new ModBlock("guerk_block", 6f, 1, Foods.GUERK_BLOCK));
-        GUERK_ORE = registerBlock("guerk_ore", new GuerkOreBlock("guerk_ore", 6f, 1, Foods.GUERK_ORE));
+        // Like the metal ores in 1.7.10 (iron, gold, copper, ...) the ore drops itself; crushers turn it into Raw Guerk.
+        GUERK_ORE = registerBlock("guerk_ore", new ModBlock("guerk_ore", 6f, 1, Foods.GUERK_ORE));
         GOLD_INFUSED_OBSIDIAN = registerBlock("gold_infused_obsidian", new ModBlock("gold_infused_obsidian", 30f, 3, null));
 
         // 1.19 forge tags -> ore dictionary

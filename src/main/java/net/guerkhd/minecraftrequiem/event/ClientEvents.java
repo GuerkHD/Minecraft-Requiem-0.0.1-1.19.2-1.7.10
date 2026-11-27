@@ -7,6 +7,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.guerkhd.minecraftrequiem.client.ClientStandData;
 import net.guerkhd.minecraftrequiem.client.StandHudOverlay;
+import net.guerkhd.minecraftrequiem.compat.TinkersCompat;
 import net.guerkhd.minecraftrequiem.item.ModItems;
 import net.guerkhd.minecraftrequiem.networking.ModMessages;
 import net.guerkhd.minecraftrequiem.networking.packet.AbilityC2SPacket;
@@ -17,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
 import java.util.List;
@@ -63,11 +65,18 @@ public class ClientEvents
         }
 
         @SubscribeEvent
+        public void onTextureStitch(TextureStitchEvent.Pre event)
+        {
+            // Block texture atlas: textures for the molten Guerk fluid (Tinkers' Construct).
+            if(event.map.getTextureType() == 0) TinkersCompat.registerFluidIcons(event.map);
+        }
+
+        @SubscribeEvent
         public void onTooltip(ItemTooltipEvent event)
         {
             List<String> tooltips = event.toolTip;
 
-            if(event.itemStack == null || !ModItems.isGuerkTool(event.itemStack.getItem())) return;
+            if(!ModItems.hasFoodLeech(event.itemStack)) return;
 
             // Same format as the vanilla attribute lines, e.g. "+5 Attack Damage".
             String line = EnumChatFormatting.BLUE + StatCollector.translateToLocalFormatted("attribute.modifier.plus.0",
