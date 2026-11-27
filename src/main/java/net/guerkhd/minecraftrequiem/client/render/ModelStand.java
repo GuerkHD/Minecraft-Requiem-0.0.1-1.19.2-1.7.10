@@ -1,0 +1,47 @@
+package net.guerkhd.minecraftrequiem.client.render;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.guerkhd.minecraftrequiem.stand.StandType;
+import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.model.ModelRenderer;
+
+/**
+ * A player-shaped stand body. Skins are 64x64: the classic 64x32 skin layout on top, extra parts below
+ * (textures/entity/stand/*.png, made by scripts/stand_textures.py in the session notes).
+ */
+@SideOnly(Side.CLIENT)
+public class ModelStand extends ModelBiped
+{
+    public ModelStand(StandType standType)
+    {
+        super(0.0F, 0.0F, 64, 64);
+
+        switch(standType)
+        {
+            case D4C:
+                // Long rabbit-like ears.
+                headPart(0, 32, -3.5F, -14.0F, -0.5F, 1, 6, 1);
+                headPart(0, 32, 2.5F, -14.0F, -0.5F, 1, 6, 1);
+                break;
+            case KILLER_QUEEN:
+                // Cat ears.
+                headPart(0, 32, -4.0F, -10.0F, -1.0F, 2, 2, 1);
+                headPart(0, 32, 2.0F, -10.0F, -1.0F, 2, 2, 1);
+                break;
+            case MAGICIANS_RED:
+                // Beak.
+                headPart(0, 32, -1.0F, -5.0F, -7.0F, 2, 2, 3);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void headPart(int u, int v, float x, float y, float z, int w, int h, int d)
+    {
+        ModelRenderer part = new ModelRenderer(this, u, v);
+        part.addBox(x, y, z, w, h, d);
+        bipedHead.addChild(part);
+    }
+}

@@ -28,6 +28,8 @@ public class EntitySheerHeartAttack extends EntityLiving
     public void onUpdate()
     {
         super.onUpdate();
+        // No AI turns the body, so keep it facing where it was placed (towards its user).
+        renderYawOffset = rotationYaw;
 
         if(!worldObj.isRemote && !isPotionActive(ModEffects.BOMB)) setDead();
     }

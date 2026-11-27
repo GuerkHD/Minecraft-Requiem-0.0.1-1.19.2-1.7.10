@@ -40,8 +40,10 @@ Some things don't exist in 1.7.10 and had to be replaced:
 - **Food Leech** is shown like the vanilla attributes in the tooltip: `+1 Food Leech` below `+5 Attack Damage`.
 - **Levitation** (C-Moon) was added in 1.9, so the mod brings its own Levitation effect with the same behaviour.
 - **Glowing** (Highway To Hell marks the closest entity) was added in 1.9; the closest entity is marked with purple particles instead.
-- **Turtles** don't exist, so Sheer Heart Attack is a small skull with its name above it.
-- **Stands** are their own invisible entity now (1.19 used an invisible zombie with NoAI, which 1.7.10 can't do).
+- **Turtles** don't exist, so Sheer Heart Attack has its own model now: a small tank with a skull on the front, like in the series.
+- **Stands** are their own entity now (1.19 used an invisible zombie with NoAI, which 1.7.10 can't do), and instead of
+  dyed leather armor every stand has its own skin (`textures/entity/stand/`). D4C, Killer Queen and Magicians Red have
+  extra model parts (ears, cat ears, beak).
   The stand isn't saved with the world anymore; it gets summoned again automatically after joining, respawning or changing dimension.
 - **Sounds**: Warden emerge (D4C) became the nether portal sound, Beacon activate (Weather Report) became thunder.
 - **Potion IDs**: 1.7.10 has no effect registry, so the custom effects use IDs 70-76. They can be changed in

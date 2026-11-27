@@ -7,34 +7,48 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 /**
- * A skull sitting on the ground. Uses the head part of the skeleton texture.
+ * Sheer Heart Attack as in the series: a small tank with a skull on the front, a dome and tracks.
+ * Living entity models are drawn with y = 24 at the ground; the front faces -z.
  */
 @SideOnly(Side.CLIENT)
 public class ModelSheerHeartAttack extends ModelBase
 {
+    private final ModelRenderer hull;
+    private final ModelRenderer dome;
     private final ModelRenderer skull;
+    private final ModelRenderer leftTrack;
+    private final ModelRenderer rightTrack;
+    private final ModelRenderer antenna;
 
     public ModelSheerHeartAttack()
     {
         textureWidth = 64;
         textureHeight = 32;
 
-        skull = new ModelRenderer(this, 0, 0);
-        skull.addBox(-4F, -8F, -4F, 8, 8, 8, 0F);
-        // Living entity models are drawn with y = 24 at the ground.
-        skull.setRotationPoint(0F, 24F, 0F);
+        hull = part(0, 0, -3, 18, -3, 6, 4, 7, false);
+        dome = part(0, 11, -2, 16, -2, 4, 2, 5, false);
+        skull = part(26, 0, -2, 17, -4, 4, 4, 1, false);
+        leftTrack = part(26, 8, 3, 20, -4, 2, 4, 8, false);
+        rightTrack = part(26, 8, -5, 20, -4, 2, 4, 8, true);
+        antenna = part(50, 0, 1.5F, 13, 1, 1, 3, 1, false);
+    }
+
+    private ModelRenderer part(int u, int v, float x, float y, float z, int w, int h, int d, boolean mirror)
+    {
+        ModelRenderer part = new ModelRenderer(this, u, v);
+        part.mirror = mirror;
+        part.addBox(x, y, z, w, h, d);
+        return part;
     }
 
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {
-        setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
+        hull.render(scale);
+        dome.render(scale);
         skull.render(scale);
-    }
-
-    @Override
-    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale, Entity entity)
-    {
-        skull.rotateAngleY = netHeadYaw / (180F / (float) Math.PI);
+        leftTrack.render(scale);
+        rightTrack.render(scale);
+        antenna.render(scale);
     }
 }

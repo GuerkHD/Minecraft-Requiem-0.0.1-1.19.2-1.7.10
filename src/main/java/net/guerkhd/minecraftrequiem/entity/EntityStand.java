@@ -6,24 +6,24 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 /**
- * The visible stand: an invisible body wearing dyed leather armor that floats behind its user.
+ * The visible stand: a body with the stand's own skin (RenderStand) that floats behind its user.
  *
- * 1.19 used an invisible zombie with NoAI, NoGravity, Silent and Invulnerable. None of these flags exist in 1.7.10,
- * so this is a small entity of its own that does nothing but follow its user.
+ * 1.19 used an invisible zombie in dyed leather armor with NoAI, NoGravity, Silent and Invulnerable. None of these
+ * flags exist in 1.7.10, so this is a small entity of its own that does nothing but follow its user.
  */
 public class EntityStand extends EntityLiving
 {
     private static final int DATA_OWNER = 20;
     private static final int DATA_CHILD = 21;
+    /** Which stand it is, so the client can pick the skin. */
+    private static final int DATA_TYPE = 22;
 
     public EntityStand(World level)
     {
@@ -43,25 +43,9 @@ public class EntityStand extends EntityLiving
         rotationYawHead = owner.rotationYawHead;
         renderYawOffset = owner.renderYawOffset;
 
+        dataWatcher.updateObject(DATA_TYPE, standType.ordinal());
         if(standType == StandType.ECHOS) setChild(true);
         setCanPickUpLoot(false);
-
-        int color = standType.getArmorColor();
-        setCurrentItemOrArmor(4, dyed(Items.leather_helmet, color));
-        setCurrentItemOrArmor(3, dyed(Items.leather_chestplate, color));
-        setCurrentItemOrArmor(2, dyed(Items.leather_leggings, color));
-        setCurrentItemOrArmor(1, dyed(Items.leather_boots, color));
-    }
-
-    private static ItemStack dyed(Item item, int color)
-    {
-        ItemStack stack = new ItemStack(item);
-        NBTTagCompound display = new NBTTagCompound();
-        display.setInteger("color", color);
-        NBTTagCompound tag = new NBTTagCompound();
-        tag.setTag("display", display);
-        stack.setTagCompound(tag);
-        return stack;
     }
 
     @Override
@@ -70,6 +54,7 @@ public class EntityStand extends EntityLiving
         super.entityInit();
         dataWatcher.addObject(DATA_OWNER, "");
         dataWatcher.addObject(DATA_CHILD, (byte) 0);
+        dataWatcher.addObject(DATA_TYPE, StandType.UNKNOWN.ordinal());
     }
 
     public String getOwnerName()
@@ -80,6 +65,11 @@ public class EntityStand extends EntityLiving
     public void setOwnerName(String name)
     {
         dataWatcher.updateObject(DATA_OWNER, name);
+    }
+
+    public StandType getStandType()
+    {
+        return StandType.byId(dataWatcher.getWatchableObjectInt(DATA_TYPE));
     }
 
     public void setChild(boolean child)
@@ -98,6 +88,8 @@ public class EntityStand extends EntityLiving
     public void onUpdate()
     {
         super.onUpdate();
+        // No AI turns the body, so it faces the same way as its user (rotationYaw is copied from them).
+        renderYawOffset = rotationYaw;
 
         if(!worldObj.isRemote) followOwner();
     }
@@ -127,34 +119,20 @@ public class EntityStand extends EntityLiving
 
     /**
      * Movement towards the spot 1.5 blocks behind the user.
+     * Only the direction the user faces counts, not how far up or down they look: 1.19 used the look vector, which
+     * pulled the stand into the user (and in front of the camera) when looking down.
      */
     private Vec3 behindMove(EntityPlayer target, double yOffset)
     {
-        Vec3 view = target.getLook(1f);
-        double x = target.posX - view.xCoord * 1.5;
+        float yaw = target.rotationYaw * (float) Math.PI / 180F;
+        double x = target.posX + MathHelper.sin(yaw) * 1.5;
         double y = target.boundingBox.minY + yOffset;
-        double z = target.posZ - view.zCoord * 1.5;
+        double z = target.posZ - MathHelper.cos(yaw) * 1.5;
 
-        double dx = x - posX;
-        double dy = y - posY;
-        double dz = z - posZ;
-
-        double distX = x - target.posX, distY = y - target.boundingBox.minY, distZ = z - target.posZ;
-        if(distX * distX + distY * distY + distZ * distZ < 0.5)
-        {
-            dx -= 0.7;
-            dz -= 0.7;
-        }
-        return Vec3.createVectorHelper(dx, dy, dz);
+        return Vec3.createVectorHelper(x - posX, y - posY, z - posZ);
     }
 
     // --- Everything below turns this into a harmless prop (1.19: NoAI, NoGravity, Silent, Invulnerable). ---
-
-    @Override
-    public boolean isInvisible()
-    {
-        return true;
-    }
 
     @Override
     protected boolean isAIEnabled()
