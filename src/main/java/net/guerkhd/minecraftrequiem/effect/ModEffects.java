@@ -29,17 +29,24 @@ public class ModEffects
     public static ModPotion CONSTIPATION;
     public static ModPotion LEVITATION;
 
+    /**
+     * The color only tints the swirl particles of an entity's effects. 1.19 hid the particles of all these effects;
+     * 1.7.10 has no such flag, but it doesn't spawn any for color 0.
+     */
+    private static final int NO_PARTICLES = 0;
+
     public static void register()
     {
         extendPotionArray(MAX_POTION_ID + 1);
 
-        TIME_STOP = add(new TimeStopEffect(id(MinecraftRequiemCommonConfig.TIME_STOP_ID, "time_stop"), true, 0));
-        BOMB = add(new BombEffect(id(MinecraftRequiemCommonConfig.BOMB_ID, "bomb"), true, 0));
-        GREEN_DAY = add(new GreenDayEffect(id(MinecraftRequiemCommonConfig.GREEN_DAY_ID, "green_day"), true, 0));
-        THREE_FREEZE = add(new ThreeFreezeEffect(id(MinecraftRequiemCommonConfig.THREE_FREEZE_ID, "three_freeze"), true, 0));
-        EPITAPH = add(new KCEffect(id(MinecraftRequiemCommonConfig.EPITAPH_ID, "epitaph"), false, 0, "epitaph"));
-        CONSTIPATION = add(new ConstipationEffect(id(MinecraftRequiemCommonConfig.CONSTIPATION_ID, "constipation"), false, 0));
-        LEVITATION = add(new LevitationEffect(id(MinecraftRequiemCommonConfig.LEVITATION_ID, "levitation"), true, 0));
+        TIME_STOP = add(new TimeStopEffect(id(MinecraftRequiemCommonConfig.TIME_STOP_ID, "time_stop"), true, NO_PARTICLES));
+        BOMB = add(new BombEffect(id(MinecraftRequiemCommonConfig.BOMB_ID, "bomb"), true, NO_PARTICLES));
+        GREEN_DAY = add(new GreenDayEffect(id(MinecraftRequiemCommonConfig.GREEN_DAY_ID, "green_day"), true, NO_PARTICLES));
+        THREE_FREEZE = add(new ThreeFreezeEffect(id(MinecraftRequiemCommonConfig.THREE_FREEZE_ID, "three_freeze"), true, NO_PARTICLES));
+        EPITAPH = add(new KCEffect(id(MinecraftRequiemCommonConfig.EPITAPH_ID, "epitaph"), false, NO_PARTICLES, "epitaph"));
+        // Harmful: 1.19 registered it as beneficial by mistake (copied from Epitaph). Mods that cure bad effects check this.
+        CONSTIPATION = add(new ConstipationEffect(id(MinecraftRequiemCommonConfig.CONSTIPATION_ID, "constipation"), true, NO_PARTICLES));
+        LEVITATION = add(new LevitationEffect(id(MinecraftRequiemCommonConfig.LEVITATION_ID, "levitation"), true, NO_PARTICLES));
     }
 
     public static List<ModPotion> all()

@@ -1,15 +1,20 @@
 package net.guerkhd.minecraftrequiem.effect;
 
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.guerkhd.minecraftrequiem.MinecraftRequiem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
+
+import java.lang.reflect.Field;
 
 /**
  * Base class for the mod's effects (1.19: MobEffect).
@@ -21,6 +26,7 @@ import org.lwjgl.opengl.GL11;
 public class ModPotion extends Potion
 {
     private final ResourceLocation icon;
+    private static Field floatingTickCount;
 
     public ModPotion(int id, boolean isBadEffect, int color, String name)
     {
@@ -33,6 +39,25 @@ public class ModPotion extends Potion
      * Called every tick on both sides for every living entity that has this effect.
      */
     public void livingTick(EntityLivingBase livingEntity, int amplifier) {    }
+
+    /**
+     * Keeps the server from kicking a player who hangs in the air because of an effect ("kicked for floating too long",
+     * after 4 seconds unless allow-flight is on). Vanilla 1.9+ makes the same exception for Levitation.
+     */
+    protected static void allowFloating(EntityLivingBase livingEntity)
+    {
+        if(!(livingEntity instanceof EntityPlayerMP) || ((EntityPlayerMP) livingEntity).playerNetServerHandler == null) return;
+
+        try
+        {
+            if(floatingTickCount == null) floatingTickCount = ReflectionHelper.findField(NetHandlerPlayServer.class, "floatingTickCount", "field_147365_f");
+            floatingTickCount.setInt(((EntityPlayerMP) livingEntity).playerNetServerHandler, 0);
+        }
+        catch(Exception e)
+        {
+            // Not worth crashing over; at worst the old kick stays.
+        }
+    }
 
     protected boolean hasIcon()
     {

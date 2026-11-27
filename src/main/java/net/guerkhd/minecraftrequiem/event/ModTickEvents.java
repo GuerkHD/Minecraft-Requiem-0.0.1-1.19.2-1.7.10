@@ -36,16 +36,11 @@ public class ModTickEvents
         if(stand == null) return;
 
         StandManager.ensureStandEntity((EntityPlayerMP) player, stand);
+        StandManager.keepStandEffects((EntityPlayerMP) player, stand);
         clearLostBomb(player, stand);
         refreshThreeFreeze(player, stand);
         greenDay(player, stand);
         glowClosest(player, stand);
-    }
-
-    @SubscribeEvent
-    public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
-    {
-        if(event.player instanceof EntityPlayerMP) StandManager.onRespawn((EntityPlayerMP) event.player);
     }
 
     @SubscribeEvent
