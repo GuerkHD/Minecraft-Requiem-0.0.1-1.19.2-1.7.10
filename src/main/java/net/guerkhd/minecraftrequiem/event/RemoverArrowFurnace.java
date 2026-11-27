@@ -2,116 +2,109 @@ package net.guerkhd.minecraftrequiem.event;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import net.guerkhd.minecraftrequiem.MinecraftRequiem;
 import net.guerkhd.minecraftrequiem.item.ModItems;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldSavedData;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 /**
  * The Stand Remover Arrow's recipe: a Requiem Arrow in a vanilla furnace with a Milk Bucket as fuel.
  *
- * A normal smelting recipe would work with any fuel, and registering milk as fuel would make it burn for everything.
- * 1.7.10 has no furnace hooks, so the conversion runs here instead, after the furnaces' own update:
- * - Requiem Arrow on top, Milk Bucket in the fuel slot, empty output: the furnace lights up and converts the arrow
- *   in the usual 200 ticks, with the flame and the progress arrow running in the furnace GUI.
- * - When it is done, the Milk Bucket turns into an empty bucket, like a Lava Bucket.
- * - Taking out the arrow or the milk stops the conversion; nothing is used up until it is done.
- * - Any other fuel does nothing to the arrow, and milk heats nothing else.
+ * The milk works like a Lava Bucket, but only for the arrow:
+ * - It does nothing until a Requiem Arrow lies on top (and the output is free).
+ * - Then it is burned like lava: the bucket empties at once, and the heat lasts exactly one conversion (200 ticks).
+ * - A furnace still glowing from other fuel burns out first; the arrow never cooks with other heat.
+ * - Milk heat cooks nothing else. Taking the arrow out resets its progress, as with any smelting.
+ *
+ * Vanilla asks two separate questions: does the item on top have a smelting result, and does the item in the fuel slot
+ * burn? Neither side knows the other, and 1.7.10 has no event where a mod could join them. So this runs after the
+ * furnaces' own update every tick and handles the arrow itself. Which furnaces burn milk heat is kept in the world's
+ * saved data, so it survives unloaded chunks and restarts.
  */
 public class RemoverArrowFurnace
 {
     private static final int CONVERSION_TIME = 200;
-
-    /** Furnaces that are converting right now. Lost on restart, which only restarts the conversion. */
-    private final Map<TileEntityFurnace, Conversion> conversions = new WeakHashMap<TileEntityFurnace, Conversion>();
-
-    private static class Conversion
-    {
-        int progress;
-        /** True if the furnace was cold and the heat is ours; then it goes out again when the conversion ends. */
-        boolean ownHeat;
-    }
+    /** +1: the conversion counts the ticks after ignition, the furnace counts down before that. */
+    private static final int MILK_BURN_TIME = CONVERSION_TIME + 1;
 
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent event)
     {
         if(event.phase != TickEvent.Phase.END || event.world.isRemote) return;
 
+        World world = event.world;
+        MilkFurnaces milkFurnaces = MilkFurnaces.get(world);
+
         // Collect first: lighting a furnace re-adds its tile entity to the list we would be iterating.
         List<TileEntityFurnace> furnaces = new ArrayList<TileEntityFurnace>();
-        for(Object o : event.world.loadedTileEntityList)
+        for(Object o : world.loadedTileEntityList)
         {
             // Only the vanilla furnace; other mods' furnaces may use their slots differently.
             if(o == null || o.getClass() != TileEntityFurnace.class) continue;
             TileEntityFurnace furnace = (TileEntityFurnace) o;
-            if(!furnace.isInvalid() && (isRequiemArrow(furnace.getStackInSlot(0)) || conversions.containsKey(furnace))) furnaces.add(furnace);
+            if(!furnace.isInvalid() && (isRequiemArrow(furnace.getStackInSlot(0)) || milkFurnaces.get(furnace) != null)) furnaces.add(furnace);
         }
 
-        for(TileEntityFurnace furnace : furnaces) update(event.world, furnace);
+        for(TileEntityFurnace furnace : furnaces) update(world, milkFurnaces, furnace);
+
+        if(world.getTotalWorldTime() % 100 == 0) milkFurnaces.removeMissing(world);
     }
 
-    private void update(World world, TileEntityFurnace furnace)
+    private static void update(World world, MilkFurnaces milkFurnaces, TileEntityFurnace furnace)
     {
-        Conversion conversion = conversions.get(furnace);
+        Integer progress = milkFurnaces.get(furnace);
+        boolean arrowReady = isRequiemArrow(furnace.getStackInSlot(0)) && furnace.getStackInSlot(2) == null;
+
+        // Milk heat: only the arrow cooks. Anything else gets its cook time reset, so it never finishes.
+        if(progress != null && furnace.furnaceBurnTime > 0)
+        {
+            progress = arrowReady ? progress + 1 : 0;
+
+            if(progress >= CONVERSION_TIME)
+            {
+                furnace.decrStackSize(0, 1);
+                furnace.setInventorySlotContents(2, new ItemStack(ModItems.REMOVER_ARROW));
+                furnace.markDirty();
+                progress = 0;
+            }
+
+            // The furnace knows no recipe for the arrow and resets its cook time every tick; set again for the GUI.
+            furnace.furnaceCookTime = progress;
+            milkFurnaces.put(furnace, progress);
+        }
+
+        if(furnace.furnaceBurnTime > 0) return;
+
+        // The furnace is out: light the milk if there is an arrow to convert (progress carries over, as between fuels).
         ItemStack fuel = furnace.getStackInSlot(1);
-        boolean ready = isRequiemArrow(furnace.getStackInSlot(0)) && fuel != null && fuel.getItem() == Items.milk_bucket
-                && furnace.getStackInSlot(2) == null;
-
-        if(!ready)
+        if(arrowReady && fuel != null && fuel.getItem() == Items.milk_bucket)
         {
-            if(conversion != null) stop(furnace, conversion);
-            return;
-        }
-
-        if(conversion == null)
-        {
-            conversion = new Conversion();
-            conversions.put(furnace, conversion);
-        }
-
-        // A furnace still glowing from other fuel keeps that heat; once it runs out, the milk takes over.
-        if(!conversion.ownHeat && furnace.furnaceBurnTime <= 1)
-        {
-            conversion.ownHeat = true;
-            // A burn time of 0 means the furnace block is the unlit one.
-            if(furnace.furnaceBurnTime == 0) light(world, furnace);
-        }
-
-        conversion.progress++;
-        // The furnace resets its cook time every tick (it knows no recipe for the arrow), so it is set again for the GUI.
-        furnace.furnaceCookTime = conversion.progress;
-        if(conversion.ownHeat)
-        {
-            // +1: the furnace counts down by one before this runs again, and must not go out on its own.
-            furnace.furnaceBurnTime = CONVERSION_TIME - conversion.progress + 1;
-            furnace.currentItemBurnTime = CONVERSION_TIME;
-        }
-
-        if(conversion.progress >= CONVERSION_TIME)
-        {
-            furnace.decrStackSize(0, 1);
-            furnace.setInventorySlotContents(2, new ItemStack(ModItems.REMOVER_ARROW));
             furnace.setInventorySlotContents(1, new ItemStack(Items.bucket));
-            stop(furnace, conversion);
+            furnace.furnaceBurnTime = MILK_BURN_TIME;
+            furnace.currentItemBurnTime = MILK_BURN_TIME;
             furnace.markDirty();
+            light(world, furnace);
+            milkFurnaces.put(furnace, progress != null ? progress : 0);
         }
-    }
-
-    private void stop(TileEntityFurnace furnace, Conversion conversion)
-    {
-        conversions.remove(furnace);
-        furnace.furnaceCookTime = 0;
-        // Let the furnace go out by itself on its next update.
-        if(conversion.ownHeat && furnace.furnaceBurnTime > 1) furnace.furnaceBurnTime = 1;
+        else if(progress != null)
+        {
+            milkFurnaces.remove(furnace);
+        }
     }
 
     /**
@@ -130,5 +123,99 @@ public class RemoverArrowFurnace
     private static boolean isRequiemArrow(ItemStack stack)
     {
         return stack != null && stack.getItem() == ModItems.REQUIEM_ARROW;
+    }
+
+    /**
+     * Furnaces burning milk heat and their conversion progress, saved with the world (data/minecraftrequiem_milk_furnaces.dat).
+     */
+    public static class MilkFurnaces extends WorldSavedData
+    {
+        private static final String NAME = MinecraftRequiem.MOD_ID + "_milk_furnaces";
+
+        private final Map<ChunkCoordinates, Integer> progress = new HashMap<ChunkCoordinates, Integer>();
+
+        public MilkFurnaces(String name)
+        {
+            super(name);
+        }
+
+        static MilkFurnaces get(World world)
+        {
+            MilkFurnaces data = (MilkFurnaces) world.perWorldStorage.loadData(MilkFurnaces.class, NAME);
+            if(data == null)
+            {
+                data = new MilkFurnaces(NAME);
+                world.perWorldStorage.setData(NAME, data);
+            }
+            return data;
+        }
+
+        Integer get(TileEntity furnace)
+        {
+            return progress.get(position(furnace));
+        }
+
+        void put(TileEntity furnace, int value)
+        {
+            Integer old = progress.put(position(furnace), value);
+            if(old == null || old != value) markDirty();
+        }
+
+        void remove(TileEntity furnace)
+        {
+            if(progress.remove(position(furnace)) != null) markDirty();
+        }
+
+        /**
+         * Forgets furnaces that were broken or replaced (checked only where the chunk is loaded).
+         */
+        void removeMissing(World world)
+        {
+            for(Iterator<ChunkCoordinates> it = progress.keySet().iterator(); it.hasNext();)
+            {
+                ChunkCoordinates pos = it.next();
+                if(!world.blockExists(pos.posX, pos.posY, pos.posZ)) continue;
+
+                TileEntity te = world.getTileEntity(pos.posX, pos.posY, pos.posZ);
+                if(te == null || te.getClass() != TileEntityFurnace.class)
+                {
+                    it.remove();
+                    markDirty();
+                }
+            }
+        }
+
+        private static ChunkCoordinates position(TileEntity te)
+        {
+            return new ChunkCoordinates(te.xCoord, te.yCoord, te.zCoord);
+        }
+
+        @Override
+        public void readFromNBT(NBTTagCompound nbt)
+        {
+            progress.clear();
+            NBTTagList list = nbt.getTagList("furnaces", 10);
+            for(int i = 0; i < list.tagCount(); i++)
+            {
+                NBTTagCompound entry = list.getCompoundTagAt(i);
+                progress.put(new ChunkCoordinates(entry.getInteger("x"), entry.getInteger("y"), entry.getInteger("z")), entry.getInteger("progress"));
+            }
+        }
+
+        @Override
+        public void writeToNBT(NBTTagCompound nbt)
+        {
+            NBTTagList list = new NBTTagList();
+            for(Map.Entry<ChunkCoordinates, Integer> e : progress.entrySet())
+            {
+                NBTTagCompound entry = new NBTTagCompound();
+                entry.setInteger("x", e.getKey().posX);
+                entry.setInteger("y", e.getKey().posY);
+                entry.setInteger("z", e.getKey().posZ);
+                entry.setInteger("progress", e.getValue());
+                list.appendTag(entry);
+            }
+            nbt.setTag("furnaces", list);
+        }
     }
 }
