@@ -15,7 +15,6 @@ item.minecraftrequiem.guerk_hoe.name=Guerk Hoe
 
 tile.minecraftrequiem.guerk_block.name=Block of Guerk
 tile.minecraftrequiem.guerk_ore.name=Guerk Ore
-tile.minecraftrequiem.deepslate_guerk_ore.name=Deepslate Guerk Ore
 tile.minecraftrequiem.edible_gold_block.name=Edible Block of Gold
 tile.minecraftrequiem.gold_infused_obsidian.name=Gold Infused Obsidian
 
@@ -34,7 +33,8 @@ effect.minecraftrequiem.three_freeze=Three Freeze
 effect.minecraftrequiem.constipation=Constipation
 effect.minecraftrequiem.levitation=Levitation
 
+attribute.name.minecraftrequiem.foodLeech=Food Leech
+
 message.minecraftrequiem.stand_remover_messeage=Stand removed.
-message.minecraftrequiem.food_leech= 1 Food Leech
 
 itemGroup.minecraftrequiemtab=Minecraft Requiem

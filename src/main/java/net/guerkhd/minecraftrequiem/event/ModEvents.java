@@ -75,7 +75,7 @@ public class ModEvents
             if(source instanceof EntityLivingBase)
             {
                 ItemStack held = ((EntityLivingBase) source).getHeldItem();
-                if(held != null && ModItems.isGuerkTool(held.getItem())) foodLeech((EntityLivingBase) source, entity, 1);
+                if(held != null && ModItems.isGuerkTool(held.getItem())) foodLeech((EntityLivingBase) source, entity, ModItems.GUERK_FOOD_LEECH);
             }
 
             threeFreeze(entity, source);

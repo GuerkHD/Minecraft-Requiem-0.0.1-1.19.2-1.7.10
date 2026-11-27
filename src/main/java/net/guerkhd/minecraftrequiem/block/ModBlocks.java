@@ -11,8 +11,6 @@ public class ModBlocks
 {
     public static Block GUERK_BLOCK;
     public static Block GUERK_ORE;
-    /** There is no deepslate in 1.7.10; this variant generates in the deep stone layer instead. */
-    public static Block DEEPSLATE_GUERK_ORE;
     public static Block EDIBLE_GOLD_BLOCK;
     public static Block GOLD_INFUSED_OBSIDIAN;
 
@@ -20,14 +18,12 @@ public class ModBlocks
     {
         GUERK_BLOCK = registerBlock("guerk_block", new ModBlock("guerk_block", 6f, 1, Foods.GUERK_BLOCK));
         GUERK_ORE = registerBlock("guerk_ore", new GuerkOreBlock("guerk_ore", 6f, 1, Foods.GUERK_ORE));
-        DEEPSLATE_GUERK_ORE = registerBlock("deepslate_guerk_ore", new GuerkOreBlock("deepslate_guerk_ore", 6f, 1, Foods.DEEPSLATE_GUERK_ORE));
         EDIBLE_GOLD_BLOCK = registerBlock("edible_gold_block", new ModBlock("edible_gold_block", 6f, 1, Foods.EDIBLE_GOLD_BLOCK));
         GOLD_INFUSED_OBSIDIAN = registerBlock("gold_infused_obsidian", new ModBlock("gold_infused_obsidian", 30f, 3, null));
 
         // 1.19 forge tags -> ore dictionary
         OreDictionary.registerOre("blockGuerk", GUERK_BLOCK);
         OreDictionary.registerOre("oreGuerk", GUERK_ORE);
-        OreDictionary.registerOre("oreGuerk", DEEPSLATE_GUERK_ORE);
     }
 
     private static Block registerBlock(String name, Block block)
@@ -45,12 +41,6 @@ public class ModBlocks
                 .build();
 
         public static final FoodProperties GUERK_ORE = new FoodProperties.Builder()
-                .nutrition(2)
-                .saturationMod(0.6f)
-                .effect(() -> Potion.moveSlowdown, 100, 1, 1)
-                .build();
-
-        public static final FoodProperties DEEPSLATE_GUERK_ORE = new FoodProperties.Builder()
                 .nutrition(2)
                 .saturationMod(0.6f)
                 .effect(() -> Potion.moveSlowdown, 100, 1, 1)

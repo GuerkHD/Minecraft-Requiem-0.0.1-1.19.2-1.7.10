@@ -67,16 +67,30 @@ public class ClientEvents
         {
             List<String> tooltips = event.toolTip;
 
-            if(event.itemStack != null && ModItems.isGuerkTool(event.itemStack.getItem()))
-            {
-                tooltips.add(getIntex(tooltips.size()), EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("message.minecraftrequiem.food_leech"));
-            }
-        }
+            if(event.itemStack == null || !ModItems.isGuerkTool(event.itemStack.getItem())) return;
 
-        private static int getIntex(int size)
-        {
-            if(size > 5) size = 5;
-            return size;
+            // Same format as the vanilla attribute lines, e.g. "+5 Attack Damage".
+            String line = EnumChatFormatting.BLUE + StatCollector.translateToLocalFormatted("attribute.modifier.plus.0",
+                    String.valueOf(ModItems.GUERK_FOOD_LEECH), StatCollector.translateToLocal("attribute.name.minecraftrequiem.foodLeech"));
+
+            // Put it right after the last attribute line (they are blue).
+            int lastAttribute = -1;
+            for(int i = 0; i < tooltips.size(); i++)
+            {
+                if(tooltips.get(i).startsWith(EnumChatFormatting.BLUE.toString())) lastAttribute = i;
+            }
+
+            if(lastAttribute >= 0)
+            {
+                tooltips.add(lastAttribute + 1, line);
+            }
+            else
+            {
+                // No attributes yet (the hoe): start the attribute block like vanilla, with an empty line.
+                int index = Math.min(1, tooltips.size());
+                tooltips.add(index, line);
+                tooltips.add(index, "");
+            }
         }
     }
 }

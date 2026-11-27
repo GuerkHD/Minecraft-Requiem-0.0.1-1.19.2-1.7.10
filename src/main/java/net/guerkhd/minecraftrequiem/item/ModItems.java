@@ -13,6 +13,9 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class ModItems
 {
+    /** Food taken from the target and given to the attacker on every hit with a Guerk tool. */
+    public static final int GUERK_FOOD_LEECH = 1;
+
     public static Item GUERK_INGOT;
     public static Item RAW_GUERK;
     public static Item GUERK_NUGGET;

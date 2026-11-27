@@ -11,29 +11,27 @@ import net.minecraft.world.gen.feature.WorldGenMinable;
 import java.util.Random;
 
 /**
- * Guerk Ore in the overworld (1.19: placed feature + biome modifier).
+ * Guerk Ore (1.19: placed feature + biome modifier).
  *
- * 1.19 placed the veins in a triangle between y = -114 and y = 86 (peak at y = -14) in a world going down to y = -64,
- * with the deepslate variant below y = 0. Squeezed onto the 1.7.10 height range (y = -64 becomes y = 0) that is a
- * triangle between y = -29 and y = 86 (peak at y = 28), with the deepslate variant below y = 36.
- * Veins that land below the world are skipped, just like in 1.19.
+ * Generates in every dimension, replacing stone only, so it shows up wherever there is stone
+ * (overworld and modded dimensions, but not the Nether or the End).
+ *
+ * 1.19 placed the veins in a triangle between y = -114 and y = 86 (peak at y = -14) in a world going down to y = -64.
+ * Squeezed onto the 1.7.10 height range (y = -64 becomes y = 0) that is a triangle between y = -29 and y = 86
+ * (peak at y = 28). Veins that land below the world are skipped, just like in 1.19.
  */
 public class GuerkOreGenerator implements IWorldGenerator
 {
     private static final int MIN_Y = -29;
     private static final int MAX_Y = 86;
-    private static final int DEEPSLATE_BELOW_Y = 36;
 
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
     {
-        if(world.provider.dimensionId != 0) return;
-
-        int size = MinecraftRequiemCommonConfig.GUERK_ORE_VEIN_SIZE;
-        WorldGenMinable stoneOre = new WorldGenMinable(ModBlocks.GUERK_ORE, size, Blocks.stone);
-        WorldGenMinable deepOre = new WorldGenMinable(ModBlocks.DEEPSLATE_GUERK_ORE, size, Blocks.stone);
+        WorldGenMinable guerkOre = new WorldGenMinable(ModBlocks.GUERK_ORE, MinecraftRequiemCommonConfig.GUERK_ORE_VEIN_SIZE, Blocks.stone);
 
         int half = (MAX_Y - MIN_Y) / 2 + 1;
+        int maxY = world.getActualHeight() - 1;
 
         for(int i = 0; i < MinecraftRequiemCommonConfig.GUERK_ORE_VEINS_PER_CHUNK; i++)
         {
@@ -42,9 +40,9 @@ public class GuerkOreGenerator implements IWorldGenerator
             int z = chunkZ * 16 + 8 + random.nextInt(16);
             int y = MIN_Y + random.nextInt(half) + random.nextInt(half);
 
-            if(y < 1 || y > 255) continue;
+            if(y < 1 || y > maxY) continue;
 
-            (y < DEEPSLATE_BELOW_Y ? deepOre : stoneOre).generate(world, random, x, y, z);
+            guerkOre.generate(world, random, x, y, z);
         }
     }
 }

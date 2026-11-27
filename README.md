@@ -27,10 +27,14 @@ Minecraft 1.7.10 needs Java 8; Gradle downloads a Java 8 JDK by itself if none i
 
 Some things don't exist in 1.7.10 and had to be replaced:
 
-- **Deepslate** doesn't exist. Deepslate Guerk Ore is kept and generates in the deep stone layer (below y = 36) instead.
+- **Deepslate** doesn't exist, so the Deepslate Guerk Ore was removed.
+- **Guerk Ore** generates in every dimension that has stone (1.19: overworld biomes only).
   The ore height range was squeezed from the 1.19 world height onto the 1.7.10 one.
 - **Blasting** doesn't exist, only the furnace recipes are left. Item tags became ore dictionary entries
   (`oreGuerk`, `ingotGuerk`, `nuggetGuerk`, `blockGuerk`).
+- **Enchanted golden apple**: 1.7.10 still has the vanilla recipe (8 gold blocks + apple), so the recipe from
+  Edible Blocks of Gold was removed. The Edible Block of Gold stays as food.
+- **Food Leech** is shown like the vanilla attributes in the tooltip: `+1 Food Leech` below `+5 Attack Damage`.
 - **Levitation** (C-Moon) was added in 1.9, so the mod brings its own Levitation effect with the same behaviour.
 - **Glowing** (Highway To Hell marks the closest entity) was added in 1.9; the closest entity is marked with purple particles instead.
 - **Turtles** don't exist, so Sheer Heart Attack is a small skull with its name above it.
