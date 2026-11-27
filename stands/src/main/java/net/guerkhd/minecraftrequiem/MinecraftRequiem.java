@@ -11,6 +11,7 @@ import net.guerkhd.minecraftrequiem.effect.ModEffects;
 import net.guerkhd.minecraftrequiem.entity.ModEntities;
 import net.guerkhd.minecraftrequiem.event.ModEvents;
 import net.guerkhd.minecraftrequiem.event.ModTickEvents;
+import net.guerkhd.minecraftrequiem.event.RemoverArrowFurnace;
 import net.guerkhd.minecraftrequiem.item.ModItems;
 import net.guerkhd.minecraftrequiem.item.ModRecipes;
 import net.guerkhd.minecraftrequiem.networking.ModMessages;
@@ -57,6 +58,7 @@ public class MinecraftRequiem
 
         MinecraftForge.EVENT_BUS.register(new ModEvents());
         FMLCommonHandler.instance().bus().register(new ModTickEvents());
+        FMLCommonHandler.instance().bus().register(new RemoverArrowFurnace());
 
         proxy.init(event);
     }
