@@ -40,4 +40,6 @@ itemGroup.minecraftrequiemtab=Minecraft Requiem
 
 fluid.minecraftrequiem.molten_guerk=Geschmolzenes Guerk
 material.minecraftrequiem.guerk=Guerk
-material.minecraftrequiem.guerk.ability=Nahrungsentzug
+material.minecraftrequiem.guerk.ability=Hungrig
+tooltip.minecraftrequiem.snack=Snack (Schleichen + Rechtsklick)
+tooltip.minecraftrequiem.constipation_on_hit=Verstopfung beim Treffer

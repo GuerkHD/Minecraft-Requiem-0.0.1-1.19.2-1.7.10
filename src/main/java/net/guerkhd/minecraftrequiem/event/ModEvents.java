@@ -1,6 +1,8 @@
 package net.guerkhd.minecraftrequiem.event;
 
+import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.guerkhd.minecraftrequiem.compat.TinkersCompat;
 import net.guerkhd.minecraftrequiem.config.MinecraftRequiemCommonConfig;
 import net.guerkhd.minecraftrequiem.effect.ModEffects;
 import net.guerkhd.minecraftrequiem.effect.ModPotion;
@@ -25,6 +27,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 
 import java.util.List;
@@ -34,6 +37,9 @@ import java.util.List;
  */
 public class ModEvents
 {
+    /** Tinkers tools with a Guerk binding or guard: Constipation for this many ticks per hit. */
+    private static final int CONSTIPATION_ON_HIT = 100;
+
     @SubscribeEvent
     public void onEntityConstructing(EntityEvent.EntityConstructing event)
     {
@@ -74,7 +80,12 @@ public class ModEvents
         {
             if(source instanceof EntityLivingBase)
             {
-                if(ModItems.hasFoodLeech(((EntityLivingBase) source).getHeldItem())) foodLeech((EntityLivingBase) source, entity, ModItems.GUERK_FOOD_LEECH);
+                ItemStack held = ((EntityLivingBase) source).getHeldItem();
+                if(ModItems.hasFoodLeech(held)) foodLeech((EntityLivingBase) source, entity, ModItems.GUERK_FOOD_LEECH);
+                if(TinkersCompat.hasGuerkAccessory(held) && !isStand(entity))
+                {
+                    entity.addPotionEffect(new PotionEffect(ModEffects.CONSTIPATION.id, CONSTIPATION_ON_HIT, 0));
+                }
             }
 
             threeFreeze(entity, source);
@@ -97,6 +108,20 @@ public class ModEvents
         }
 
         if(!entity.worldObj.isRemote) refreshBomb(entity);
+    }
+
+    @SubscribeEvent
+    public void onPlayerInteract(PlayerInteractEvent event)
+    {
+        // Tinkers tools with a Guerk handle: sneak + right click is a snack instead of the tool's own action.
+        // The client sends the snack itself (ClientEvents); here the server only blocks the block interaction as well.
+        if(!event.entityPlayer.worldObj.isRemote && event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK
+                && TinkersCompat.canSnack(event.entityPlayer, event.entityPlayer.getHeldItem()))
+        {
+            event.useBlock = Event.Result.DENY;
+            event.useItem = Event.Result.DENY;
+            event.setCanceled(true);
+        }
     }
 
     @SubscribeEvent

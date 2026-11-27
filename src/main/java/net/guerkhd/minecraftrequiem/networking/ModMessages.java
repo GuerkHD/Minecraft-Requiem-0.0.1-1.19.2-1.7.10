@@ -6,6 +6,7 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 import net.guerkhd.minecraftrequiem.MinecraftRequiem;
 import net.guerkhd.minecraftrequiem.networking.packet.AbilityC2SPacket;
+import net.guerkhd.minecraftrequiem.networking.packet.SnackC2SPacket;
 import net.guerkhd.minecraftrequiem.networking.packet.StandC2SPacket;
 import net.guerkhd.minecraftrequiem.networking.packet.StandDataSyncS2CPacket;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -27,6 +28,7 @@ public class ModMessages
 
         INSTANCE.registerMessage(StandC2SPacket.Handler.class, StandC2SPacket.class, id(), Side.SERVER);
         INSTANCE.registerMessage(AbilityC2SPacket.Handler.class, AbilityC2SPacket.class, id(), Side.SERVER);
+        INSTANCE.registerMessage(SnackC2SPacket.Handler.class, SnackC2SPacket.class, id(), Side.SERVER);
 
         INSTANCE.registerMessage(StandDataSyncS2CPacket.Handler.class, StandDataSyncS2CPacket.class, id(), Side.CLIENT);
     }

@@ -70,7 +70,7 @@ public class ModItems
      */
     public static boolean hasFoodLeech(ItemStack stack)
     {
-        return stack != null && (isGuerkTool(stack.getItem()) || TinkersCompat.isGuerkTool(stack));
+        return stack != null && (isGuerkTool(stack.getItem()) || TinkersCompat.hasGuerkHead(stack));
     }
 
     private static Item register(String name, Item item)

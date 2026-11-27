@@ -40,4 +40,6 @@ itemGroup.minecraftrequiemtab=Minecraft Requiem
 
 fluid.minecraftrequiem.molten_guerk=Molten Guerk
 material.minecraftrequiem.guerk=Guerk
-material.minecraftrequiem.guerk.ability=Food Leech
+material.minecraftrequiem.guerk.ability=Hungry
+tooltip.minecraftrequiem.snack=Snack (Sneak + Right Click)
+tooltip.minecraftrequiem.constipation_on_hit=Constipation on Hit

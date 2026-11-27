@@ -7,7 +7,11 @@ import net.guerkhd.minecraftrequiem.MinecraftRequiem;
 import net.guerkhd.minecraftrequiem.block.ModBlocks;
 import net.guerkhd.minecraftrequiem.config.MinecraftRequiemCommonConfig;
 import net.minecraft.block.Block;
+import net.guerkhd.minecraftrequiem.effect.ModEffects;
+import net.guerkhd.minecraftrequiem.food.FoodProperties;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -15,12 +19,15 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.Map;
+import java.util.WeakHashMap;
+
 /**
  * Tinkers' Construct:
  * - Molten Guerk: melting ore (2 ingots), Raw Guerk, nuggets, ingots and blocks in the smeltery and casting them back.
  *   Tinkers generates all of these from the ore dictionary once a fluid type called "Guerk" exists.
  * - Guerk as a tool material (stats like the stone tier of the vanilla Guerk tools) that can be cast into tool parts.
- * - Tools with a Guerk head have Food Leech, like the Guerk tools (handled in ModEvents through {@link #isGuerkTool}).
+ * - Guerk parts give tools the material's abilities: head = Food Leech, handle = Snack, binding/guard = Constipation on hit.
  */
 public class TinkersCompat
 {
@@ -76,13 +83,92 @@ public class TinkersCompat
         FMLInterModComms.sendMessage(ModCompat.TINKERS, "addPartCastingMaterial", casting);
     }
 
-    /**
-     * True for Tinkers' Construct tools with a Guerk head.
-     */
-    public static boolean isGuerkTool(ItemStack stack)
+    /** Guerk head: Food Leech (see ModEvents). */
+    public static boolean hasGuerkHead(ItemStack stack)
     {
-        if(moltenGuerk == null || stack == null || !stack.hasTagCompound() || !stack.getTagCompound().hasKey("InfiTool")) return false;
-        return stack.getTagCompound().getCompoundTag("InfiTool").getInteger("Head") == MinecraftRequiemCommonConfig.TINKERS_MATERIAL_ID;
+        return hasGuerkPart(stack, "Head");
+    }
+
+    /** Guerk handle: Snack, sneak + right click eats a piece of the tool. */
+    public static boolean hasGuerkHandle(ItemStack stack)
+    {
+        return hasGuerkPart(stack, "Handle");
+    }
+
+    /** Guerk middle part (binding or guard): hit targets get Constipation. */
+    public static boolean hasGuerkAccessory(ItemStack stack)
+    {
+        return hasGuerkPart(stack, "Accessory");
+    }
+
+    public static boolean isTinkersTool(ItemStack stack)
+    {
+        return stack != null && stack.hasTagCompound() && stack.getTagCompound().hasKey("InfiTool");
+    }
+
+    private static boolean hasGuerkPart(ItemStack stack, String part)
+    {
+        if(moltenGuerk == null || !isTinkersTool(stack)) return false;
+        NBTTagCompound tool = stack.getTagCompound().getCompoundTag("InfiTool");
+        return tool.hasKey(part) && tool.getInteger(part) == MinecraftRequiemCommonConfig.TINKERS_MATERIAL_ID;
+    }
+
+    // --- Snack ---
+
+    private static final int SNACK_DURABILITY = 10;
+    private static final int SNACK_COOLDOWN = 20;
+    /** Same as a Guerk Nugget. */
+    private static final FoodProperties SNACK = new FoodProperties.Builder().nutrition(1).saturationMod(0.3f).build();
+
+    private static final Map<EntityPlayer, Long> lastSnack = new WeakHashMap<EntityPlayer, Long>();
+
+    /**
+     * Whether sneak + right click with this stack should be a snack (cooldown not included).
+     * Checked on both sides: the client cancels the normal right click action, the server checks it again before eating.
+     */
+    public static boolean canSnack(EntityPlayer player, ItemStack stack)
+    {
+        return player.isSneaking() && hasGuerkHandle(stack)
+                && !stack.getTagCompound().getCompoundTag("InfiTool").getBoolean("Broken")
+                && player.canEat(SNACK.canAlwaysEat())
+                && !player.isPotionActive(ModEffects.CONSTIPATION);
+    }
+
+    /**
+     * True (and starts the cooldown) if the player may snack now.
+     */
+    public static boolean snackCooldownOver(EntityPlayer player)
+    {
+        long now = player.worldObj.getTotalWorldTime();
+        Long last = lastSnack.get(player);
+        if(last != null && now - last < SNACK_COOLDOWN && now >= last) return false;
+        lastSnack.put(player, now);
+        return true;
+    }
+
+    /**
+     * Server side: eat a piece of the held tool.
+     */
+    public static void snack(EntityPlayer player)
+    {
+        ItemStack stack = player.getHeldItem();
+        if(!canSnack(player, stack) || !snackCooldownOver(player)) return;
+
+        try
+        {
+            // Tinkers keeps the durability in its own NBT data, so its own method has to do the damage (and the breaking).
+            Class.forName("tconstruct.library.tools.AbilityHelper")
+                    .getMethod("damageTool", ItemStack.class, int.class, EntityLivingBase.class, boolean.class)
+                    .invoke(null, stack, SNACK_DURABILITY, player, false);
+        }
+        catch(Exception e)
+        {
+            MinecraftRequiem.LOGGER.error("Could not damage the Tinkers tool for a snack.", e);
+            return;
+        }
+
+        player.getFoodStats().addStats(SNACK.getNutrition(), SNACK.getSaturationModifier());
+        player.worldObj.playSoundAtEntity(player, "random.burp", 0.5F, player.worldObj.rand.nextFloat() * 0.1F + 0.9F);
     }
 
     @SideOnly(Side.CLIENT)
