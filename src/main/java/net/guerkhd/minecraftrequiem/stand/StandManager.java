@@ -12,6 +12,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.FoodStats;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.WorldSettings;
 import net.minecraft.world.storage.WorldInfo;
 
 /**
@@ -158,10 +159,12 @@ public class StandManager
 
     /**
      * 1.19 gameMode.isSurvival(): survival or adventure.
+     * Not GameType.isSurvivalOrAdventure(): that one is client-only and crashes dedicated servers.
      */
     public static boolean isSurvival(EntityPlayerMP player)
     {
-        return player.theItemInWorldManager.getGameType().isSurvivalOrAdventure();
+        WorldSettings.GameType gameType = player.theItemInWorldManager.getGameType();
+        return gameType == WorldSettings.GameType.SURVIVAL || gameType == WorldSettings.GameType.ADVENTURE;
     }
 
     /**
