@@ -1,0 +1,40 @@
+item.minecraftrequiem.guerk_ingot.name=Guerk Ingot
+item.minecraftrequiem.raw_guerk.name=Raw Guerk
+item.minecraftrequiem.guerk_nugget.name=Guerk Nugget
+item.minecraftrequiem.stand_arrow.name=Stand Arrow
+item.minecraftrequiem.requiem_arrow.name=Requiem Arrow
+item.minecraftrequiem.stand_arrow_tip.name=Stand Arrow Tip
+item.minecraftrequiem.requiem_arrow_tip.name=Requiem Arrow Tip
+item.minecraftrequiem.remover_arrow.name=Stand Remover Arrow
+
+item.minecraftrequiem.guerk_sword.name=Guerk Sword
+item.minecraftrequiem.guerk_pickaxe.name=Guerk Pickaxe
+item.minecraftrequiem.guerk_axe.name=Guerk Axe
+item.minecraftrequiem.guerk_shovel.name=Guerk Shovel
+item.minecraftrequiem.guerk_hoe.name=Guerk Hoe
+
+tile.minecraftrequiem.guerk_block.name=Block of Guerk
+tile.minecraftrequiem.guerk_ore.name=Guerk Ore
+tile.minecraftrequiem.deepslate_guerk_ore.name=Deepslate Guerk Ore
+tile.minecraftrequiem.edible_gold_block.name=Edible Block of Gold
+tile.minecraftrequiem.gold_infused_obsidian.name=Gold Infused Obsidian
+
+entity.minecraftrequiem.stand.name=Stand
+entity.minecraftrequiem.sheer_heart_attack.name=Sheer Heart Attack
+
+key.category.minecraftrequiem.stand=Minecraft Requiem
+key.minecraftrequiem.summon_stand=Summon Stand
+key.minecraftrequiem.stand_ability=Stand Ability
+
+effect.minecraftrequiem.time_stop=Time Stop
+effect.minecraftrequiem.bomb=Bomb
+effect.minecraftrequiem.epitaph=Epitaph
+effect.minecraftrequiem.green_day=Green Day
+effect.minecraftrequiem.three_freeze=Three Freeze
+effect.minecraftrequiem.constipation=Constipation
+effect.minecraftrequiem.levitation=Levitation
+
+message.minecraftrequiem.stand_remover_messeage=Stand removed.
+message.minecraftrequiem.food_leech= 1 Food Leech
+
+itemGroup.minecraftrequiemtab=Minecraft Requiem

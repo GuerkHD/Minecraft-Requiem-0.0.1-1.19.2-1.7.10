@@ -1,30 +1,23 @@
 package net.guerkhd.minecraftrequiem.effect;
 
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.entity.EntityLivingBase;
 
-public class TimeStopEffect extends MobEffect
+public class TimeStopEffect extends ModPotion
 {
-    public TimeStopEffect(MobEffectCategory mobEffectCategory, int color)
+    public TimeStopEffect(int id, boolean isBadEffect, int color)
     {
-        super(mobEffectCategory, color);
+        super(id, isBadEffect, color, "time_stop");
     }
 
     @Override
-    public void applyEffectTick(LivingEntity plivingEntity, int pAmplifier)
+    public void livingTick(EntityLivingBase plivingEntity, int pAmplifier)
     {
-        if(!plivingEntity.level.isClientSide())
+        if(!plivingEntity.worldObj.isRemote)
         {
-            plivingEntity.teleportTo(plivingEntity.getX(), plivingEntity.getY(), plivingEntity.getZ());
-            plivingEntity.setDeltaMovement(0, 0, 0);
+            plivingEntity.setPositionAndUpdate(plivingEntity.posX, plivingEntity.posY, plivingEntity.posZ);
+            plivingEntity.motionX = 0;
+            plivingEntity.motionY = 0;
+            plivingEntity.motionZ = 0;
         }
-        super.applyEffectTick(plivingEntity, pAmplifier);
-    }
-
-    @Override
-    public boolean isDurationEffectTick(int pDuration, int pAmplifier)
-    {
-        return true;
     }
 }

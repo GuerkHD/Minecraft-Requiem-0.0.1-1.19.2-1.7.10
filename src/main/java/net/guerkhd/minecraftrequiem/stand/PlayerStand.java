@@ -1,9 +1,25 @@
 package net.guerkhd.minecraftrequiem.stand;
 
-import net.minecraft.nbt.CompoundTag;
+import net.guerkhd.minecraftrequiem.entity.EntityStand;
+import net.guerkhd.minecraftrequiem.networking.ModMessages;
+import net.guerkhd.minecraftrequiem.networking.packet.StandDataSyncS2CPacket;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.IExtendedEntityProperties;
 
-public class PlayerStand
+/**
+ * Per-player stand data. 1.7.10 has no capabilities, so this is an IExtendedEntityProperties
+ * (replaces PlayerStand + PlayerStandProvider).
+ */
+public class PlayerStand implements IExtendedEntityProperties
 {
+    public static final String PROPERTY_NAME = "MinecraftRequiemStand";
+
+    private final EntityPlayer player;
+
     private boolean standUser = false;
     private boolean standActive = false;
     private int standID;
@@ -19,6 +35,24 @@ public class PlayerStand
     //ID 7 = Killer Queen
     //ID 8 = King Crimson
     //ID 9 = Green Day
+
+    /** The summoned stand. Not saved; it gets respawned when missing. */
+    private EntityStand standEntity;
+
+    public PlayerStand(EntityPlayer player)
+    {
+        this.player = player;
+    }
+
+    public static void register(EntityPlayer player)
+    {
+        player.registerExtendedProperties(PROPERTY_NAME, new PlayerStand(player));
+    }
+
+    public static PlayerStand get(EntityPlayer player)
+    {
+        return (PlayerStand) player.getExtendedProperties(PROPERTY_NAME);
+    }
 
     public boolean getStandUser()
     {
@@ -55,6 +89,11 @@ public class PlayerStand
         this.standID = standID;
     }
 
+    public StandType getStandType()
+    {
+        return StandType.byId(standID);
+    }
+
     public boolean getBomb()
     {
         return bomb;
@@ -73,6 +112,15 @@ public class PlayerStand
         this.maxY = maxY;
     }
 
+    public EntityStand getStandEntity()
+    {
+        return standEntity;
+    }
+    public void setStandEntity(EntityStand standEntity)
+    {
+        this.standEntity = standEntity;
+    }
+
     public void copyFrom(PlayerStand source)
     {
         this.standUser = source.standUser;
@@ -82,21 +130,40 @@ public class PlayerStand
         this.maxY = source.maxY;
     }
 
-    public void saveNBTData(CompoundTag nbt)
+    /**
+     * Sends everything to the client (replaces the five 1.19 *DataSyncS2CPacket classes).
+     */
+    public void sync()
     {
-        nbt.putBoolean("standUser", standUser);
-        nbt.putBoolean("standActive", standActive);
-        nbt.putInt("standID", standID);
-        nbt.putBoolean("bomb", bomb);
-        nbt.putDouble("maxY", maxY);
+        if(player instanceof EntityPlayerMP)
+        {
+            ModMessages.sendToPlayer(new StandDataSyncS2CPacket(standUser, standActive, standID, bomb, maxY), (EntityPlayerMP) player);
+        }
     }
 
-    public void loadNBTData(CompoundTag nbt)
+    @Override
+    public void saveNBTData(NBTTagCompound compound)
     {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setBoolean("standUser", standUser);
+        nbt.setBoolean("standActive", standActive);
+        nbt.setInteger("standID", standID);
+        nbt.setBoolean("bomb", bomb);
+        nbt.setDouble("maxY", maxY);
+        compound.setTag(PROPERTY_NAME, nbt);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound compound)
+    {
+        NBTTagCompound nbt = compound.getCompoundTag(PROPERTY_NAME);
         standUser = nbt.getBoolean("standUser");
         standActive = nbt.getBoolean("standActive");
-        standID = nbt.getInt("standID");
+        standID = nbt.getInteger("standID");
         bomb = nbt.getBoolean("bomb");
         maxY = nbt.getDouble("maxY");
     }
+
+    @Override
+    public void init(Entity entity, World world) {    }
 }

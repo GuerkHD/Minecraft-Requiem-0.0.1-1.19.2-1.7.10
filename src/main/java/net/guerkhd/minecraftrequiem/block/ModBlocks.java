@@ -1,80 +1,39 @@
 package net.guerkhd.minecraftrequiem.block;
 
-import net.guerkhd.minecraftrequiem.MinecraftRequiem;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.guerkhd.minecraftrequiem.effect.ModEffects;
-import net.guerkhd.minecraftrequiem.item.ModCreativeModeTab;
-import net.guerkhd.minecraftrequiem.item.ModItems;
-import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.DropExperienceBlock;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
-
-import java.util.function.Supplier;
+import net.guerkhd.minecraftrequiem.food.FoodProperties;
+import net.minecraft.block.Block;
+import net.minecraft.potion.Potion;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ModBlocks
 {
-    public static final DeferredRegister<Block> BLOCKS =
-            DeferredRegister.create(ForgeRegistries.BLOCKS, MinecraftRequiem.MOD_ID);
+    public static Block GUERK_BLOCK;
+    public static Block GUERK_ORE;
+    /** There is no deepslate in 1.7.10; this variant generates in the deep stone layer instead. */
+    public static Block DEEPSLATE_GUERK_ORE;
+    public static Block EDIBLE_GOLD_BLOCK;
+    public static Block GOLD_INFUSED_OBSIDIAN;
 
-    public static final RegistryObject<Block> GUERK_BLOCK = registerBlock("guerk_block",
-            () -> new Block(BlockBehaviour
-                    .Properties.of(Material.STONE)
-                    .strength(6f)
-                    .requiresCorrectToolForDrops()), ModCreativeModeTab.MINECRAFTREQUIEM_TAB);
-
-    public static final RegistryObject<Block> GUERK_ORE = registerBlock("guerk_ore",
-            () -> new DropExperienceBlock(BlockBehaviour
-                    .Properties.of(Material.STONE)
-                    .strength(6f)
-                    .requiresCorrectToolForDrops(),
-                    UniformInt.of(1, 3)), ModCreativeModeTab.MINECRAFTREQUIEM_TAB);
-    public static final RegistryObject<Block> DEEPSLATE_GUERK_ORE = registerBlock("deepslate_guerk_ore",
-            () -> new DropExperienceBlock(BlockBehaviour
-                    .Properties.of(Material.STONE)
-                    .strength(6f)
-                    .requiresCorrectToolForDrops(),
-                    UniformInt.of(1, 3)), ModCreativeModeTab.MINECRAFTREQUIEM_TAB);
-
-
-    public static final RegistryObject<Block> EDIBLE_GOLD_BLOCK = registerBlock("edible_gold_block",
-            () -> new Block(BlockBehaviour
-                    .Properties.of(Material.STONE)
-                    .strength(6f)
-                    .requiresCorrectToolForDrops()), ModCreativeModeTab.MINECRAFTREQUIEM_TAB);
-    public static final RegistryObject<Block> GOLD_INFUSED_OBSIDIAN = registerBlock("gold_infused_obsidian",
-            () -> new Block(BlockBehaviour
-                    .Properties.of(Material.STONE)
-                    .strength(30f)
-                    .requiresCorrectToolForDrops()), ModCreativeModeTab.MINECRAFTREQUIEM_TAB);
-
-    private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block, CreativeModeTab tab)
+    public static void register()
     {
-        RegistryObject<T> toReturn = BLOCKS.register(name, block);
-        registerBlockItem(name, toReturn, tab);
-        return toReturn;
+        GUERK_BLOCK = registerBlock("guerk_block", new ModBlock("guerk_block", 6f, 1, Foods.GUERK_BLOCK));
+        GUERK_ORE = registerBlock("guerk_ore", new GuerkOreBlock("guerk_ore", 6f, 1, Foods.GUERK_ORE));
+        DEEPSLATE_GUERK_ORE = registerBlock("deepslate_guerk_ore", new GuerkOreBlock("deepslate_guerk_ore", 6f, 1, Foods.DEEPSLATE_GUERK_ORE));
+        EDIBLE_GOLD_BLOCK = registerBlock("edible_gold_block", new ModBlock("edible_gold_block", 6f, 1, Foods.EDIBLE_GOLD_BLOCK));
+        GOLD_INFUSED_OBSIDIAN = registerBlock("gold_infused_obsidian", new ModBlock("gold_infused_obsidian", 30f, 3, null));
+
+        // 1.19 forge tags -> ore dictionary
+        OreDictionary.registerOre("blockGuerk", GUERK_BLOCK);
+        OreDictionary.registerOre("oreGuerk", GUERK_ORE);
+        OreDictionary.registerOre("oreGuerk", DEEPSLATE_GUERK_ORE);
     }
 
-    private static <T extends Block> RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block, CreativeModeTab tab)
+    private static Block registerBlock(String name, Block block)
     {
-        Item.Properties edible = new Item.Properties();
-
-        if(name.equals("guerk_block")) edible.food(Foods.GUERK_BLOCK);
-        if(name.equals("guerk_ore")) edible.food(Foods.GUERK_ORE);
-        if(name.equals("deepslate_guerk_ore")) edible.food(Foods.DEEPSLATE_GUERK_ORE);
-        if(name.equals("edible_gold_block")) edible.food(Foods.EDIBLE_GOLD_BLOCK);
-
-        return ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), edible.tab(tab)));
+        GameRegistry.registerBlock(block, EdibleBlockItem.class, name);
+        return block;
     }
 
     public static class Foods
@@ -82,31 +41,26 @@ public class ModBlocks
         public static final FoodProperties GUERK_BLOCK = new FoodProperties.Builder()
                 .nutrition(20)
                 .saturationMod(1.8f)
-                .effect(() -> new MobEffectInstance(ModEffects.CONSTIPATION.get(), 300, 0, false, false, true), 0.8f)
+                .effect(() -> ModEffects.CONSTIPATION, 300, 0, 0.8f)
                 .build();
 
         public static final FoodProperties GUERK_ORE = new FoodProperties.Builder()
                 .nutrition(2)
                 .saturationMod(0.6f)
-                .effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 1), 1)
+                .effect(() -> Potion.moveSlowdown, 100, 1, 1)
                 .build();
 
         public static final FoodProperties DEEPSLATE_GUERK_ORE = new FoodProperties.Builder()
                 .nutrition(2)
                 .saturationMod(0.6f)
-                .effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 1), 1)
+                .effect(() -> Potion.moveSlowdown, 100, 1, 1)
                 .build();
 
         public static final FoodProperties EDIBLE_GOLD_BLOCK = new FoodProperties.Builder()
                 .nutrition(20)
                 .saturationMod(1.8f)
                 .alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION, 1200, 0), 1)
+                .effect(() -> Potion.field_76444_x, 1200, 0, 1) // absorption
                 .build();
-    }
-
-    public static void register(IEventBus eventBus)
-    {
-        BLOCKS.register(eventBus);
     }
 }

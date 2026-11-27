@@ -1,6 +1,22 @@
 pluginManagement {
     repositories {
+        maven {
+            // RetroFuturaGradle
+            name = 'GTNH Maven'
+            url = 'https://nexus.gtnewhorizons.com/repository/public/'
+            mavenContent {
+                includeGroupByRegex('com\\.gtnewhorizons\\..+')
+                includeGroup('com.gtnewhorizons')
+            }
+        }
         gradlePluginPortal()
-        maven { url = 'https://maven.minecraftforge.net/' }
+        mavenCentral()
     }
 }
+
+plugins {
+    // Lets Gradle download a Java 8 JDK automatically if none is installed
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+}
+
+rootProject.name = 'minecraftrequiem'

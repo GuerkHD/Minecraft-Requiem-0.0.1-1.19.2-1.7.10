@@ -1,31 +1,22 @@
 package net.guerkhd.minecraftrequiem.effect;
 
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 
-public class ThreeFreezeEffect extends MobEffect
+public class ThreeFreezeEffect extends ModPotion
 {
-    public ThreeFreezeEffect(MobEffectCategory mobEffectCategory, int color)
+    public ThreeFreezeEffect(int id, boolean isBadEffect, int color)
     {
-        super(mobEffectCategory, color);
+        super(id, isBadEffect, color, "three_freeze");
     }
 
     @Override
-    public void applyEffectTick(LivingEntity plivingEntity, int pAmplifier)
+    public void livingTick(EntityLivingBase plivingEntity, int pAmplifier)
     {
-        if(!plivingEntity.level.isClientSide())
+        if(!plivingEntity.worldObj.isRemote)
         {
-            plivingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 6, false, false, false));
+            plivingEntity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 20, 6, true));
         }
-        super.applyEffectTick(plivingEntity, pAmplifier);
-    }
-
-    @Override
-    public boolean isDurationEffectTick(int pDuration, int pAmplifier)
-    {
-        return true;
     }
 }

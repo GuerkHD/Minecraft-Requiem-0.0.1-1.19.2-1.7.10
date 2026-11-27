@@ -1,70 +1,67 @@
 package net.guerkhd.minecraftrequiem;
 
-import com.mojang.logging.LogUtils;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.guerkhd.minecraftrequiem.block.ModBlocks;
-import net.guerkhd.minecraftrequiem.config.MinecraftRequiemClientConfig;
 import net.guerkhd.minecraftrequiem.config.MinecraftRequiemCommonConfig;
 import net.guerkhd.minecraftrequiem.effect.ModEffects;
+import net.guerkhd.minecraftrequiem.entity.ModEntities;
+import net.guerkhd.minecraftrequiem.event.ModEvents;
+import net.guerkhd.minecraftrequiem.event.ModTickEvents;
 import net.guerkhd.minecraftrequiem.item.ModItems;
+import net.guerkhd.minecraftrequiem.item.ModRecipes;
 import net.guerkhd.minecraftrequiem.networking.ModMessages;
-import net.guerkhd.minecraftrequiem.sound.ModSounds;
-import net.guerkhd.minecraftrequiem.world.feature.ModConfiguredFeatures;
-import net.guerkhd.minecraftrequiem.world.feature.ModPlacedFeatures;
-import net.minecraftforge.api.distmarker.Dist;
+import net.guerkhd.minecraftrequiem.proxy.CommonProxy;
+import net.guerkhd.minecraftrequiem.world.GuerkOreGenerator;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-// The value here should match an entry in the META-INF/mods.toml file
-@Mod(MinecraftRequiem.MOD_ID)
+import java.io.File;
+
+@Mod(modid = MinecraftRequiem.MOD_ID, name = MinecraftRequiem.MOD_NAME, version = MinecraftRequiem.VERSION)
 public class MinecraftRequiem
 {
     public static final String MOD_ID = "minecraftrequiem";
-    private static final Logger LOGGER = LogUtils.getLogger();
-    public MinecraftRequiem()
+    public static final String MOD_NAME = "Minecraft Requiem";
+    public static final String VERSION = "1.0.2-1.7.10";
+    public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+
+    @Mod.Instance(MOD_ID)
+    public static MinecraftRequiem instance;
+
+    @SidedProxy(clientSide = "net.guerkhd.minecraftrequiem.proxy.ClientProxy",
+                serverSide = "net.guerkhd.minecraftrequiem.proxy.CommonProxy")
+    public static CommonProxy proxy;
+
+    @Mod.EventHandler
+    public void preInit(FMLPreInitializationEvent event)
     {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        MinecraftRequiemCommonConfig.load(new File(event.getModConfigurationDirectory(), "minecraftrequiem-common.cfg"));
 
-        ModBlocks.register(modEventBus);
-        ModItems.register(modEventBus);
+        // Potions first: food items and blocks reference them.
+        ModEffects.register();
+        ModBlocks.register();
+        ModItems.register();
+        ModEntities.register();
+        ModMessages.register();
 
-        ModConfiguredFeatures.register(modEventBus);
-        ModPlacedFeatures.register(modEventBus);
-
-        ModEffects.register(modEventBus);
-        ModSounds.register(modEventBus);
-
-        modEventBus.addListener(this::commonSetup);
-
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, MinecraftRequiemClientConfig.SPEC, "minecraftrequiem-client.toml");
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MinecraftRequiemCommonConfig.SPEC, "minecraftrequiem-common.toml");
-
-        MinecraftForge.EVENT_BUS.register(this);
+        proxy.preInit(event);
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event)
+    @Mod.EventHandler
+    public void init(FMLInitializationEvent event)
     {
-        event.enqueueWork(() ->
-        {
-            ModMessages.register();
-        });
-    }
+        ModRecipes.register();
+        GameRegistry.registerWorldGenerator(new GuerkOreGenerator(), 0);
 
-    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-    @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents
-    {
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event)
-        {
+        MinecraftForge.EVENT_BUS.register(new ModEvents());
+        FMLCommonHandler.instance().bus().register(new ModTickEvents());
 
-        }
+        proxy.init(event);
     }
 }

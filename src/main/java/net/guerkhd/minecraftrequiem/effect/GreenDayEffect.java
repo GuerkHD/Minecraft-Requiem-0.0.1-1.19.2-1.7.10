@@ -1,32 +1,23 @@
 package net.guerkhd.minecraftrequiem.effect;
 
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 
-public class GreenDayEffect extends MobEffect
+public class GreenDayEffect extends ModPotion
 {
-    public GreenDayEffect(MobEffectCategory mobEffectCategory, int color)
+    public GreenDayEffect(int id, boolean isBadEffect, int color)
     {
-        super(mobEffectCategory, color);
+        super(id, isBadEffect, color, "green_day");
     }
 
     @Override
-    public void applyEffectTick(LivingEntity plivingEntity, int pAmplifier)
+    public void livingTick(EntityLivingBase plivingEntity, int pAmplifier)
     {
-        if(!plivingEntity.level.isClientSide())
+        if(!plivingEntity.worldObj.isRemote)
         {
-            if(pAmplifier > 0 && !plivingEntity.hasEffect(MobEffects.POISON)) plivingEntity.addEffect(new MobEffectInstance(MobEffects.POISON, 30, pAmplifier-1));
-            else if(pAmplifier == 0 && plivingEntity.hasEffect(MobEffects.POISON)) plivingEntity.removeEffect(MobEffects.POISON);
+            if(pAmplifier > 0 && !plivingEntity.isPotionActive(Potion.poison)) plivingEntity.addPotionEffect(new PotionEffect(Potion.poison.id, 30, pAmplifier - 1));
+            else if(pAmplifier == 0 && plivingEntity.isPotionActive(Potion.poison)) plivingEntity.removePotionEffect(Potion.poison.id);
         }
-        super.applyEffectTick(plivingEntity, pAmplifier);
-    }
-
-    @Override
-    public boolean isDurationEffectTick(int pDuration, int pAmplifier)
-    {
-        return true;
     }
 }

@@ -1,29 +1,9 @@
 package net.guerkhd.minecraftrequiem.effect;
 
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.entity.LivingEntity;
-
-public class BombEffect extends MobEffect
+public class BombEffect extends ModPotion
 {
-    public BombEffect(MobEffectCategory mobEffectCategory, int color)
+    public BombEffect(int id, boolean isBadEffect, int color)
     {
-        super(mobEffectCategory, color);
-    }
-
-    @Override
-    public void applyEffectTick(LivingEntity plivingEntity, int pAmplifier)
-    {
-        if(!plivingEntity.level.isClientSide())
-        {
-            //Nothing to see here
-        }
-        super.applyEffectTick(plivingEntity, pAmplifier);
-    }
-
-    @Override
-    public boolean isDurationEffectTick(int pDuration, int pAmplifier)
-    {
-        return true;
+        super(id, isBadEffect, color, "bomb");
     }
 }

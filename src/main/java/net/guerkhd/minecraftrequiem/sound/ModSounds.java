@@ -1,42 +1,33 @@
 package net.guerkhd.minecraftrequiem.sound;
 
 import net.guerkhd.minecraftrequiem.MinecraftRequiem;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
+/**
+ * 1.7.10 has no sound registry: sounds are referenced by name and declared in assets/minecraftrequiem/sounds.json.
+ */
 public class ModSounds
 {
-    public static final DeferredRegister<SoundEvent> SOUND_EVENTS =
-            DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, MinecraftRequiem.MOD_ID);
+    public static final String ZA_WARUDO = sound("za_warudo");
+    public static final String C_MOON = sound("c_moon");
+    public static final String STAND_SUMMON = sound("stand_summon");
+    public static final String STAND_UNSUMMON = sound("stand_unsummon");
+    public static final String KING_CRIMSON = sound("king_crimson");
+    public static final String KILLER_QUEEN = sound("killer_queen");
+    public static final String THREE_FREEZE = sound("three_freeze");
+    public static final String GREEN_DAY = sound("green_day");
 
-    public static final RegistryObject<SoundEvent> ZA_WARUDO =
-            registerSoundEvent("za_warudo");
-    public static final RegistryObject<SoundEvent> C_MOON =
-            registerSoundEvent("c_moon");
-    public static final RegistryObject<SoundEvent> STAND_SUMMON =
-            registerSoundEvent("stand_summon");
-    public static final RegistryObject<SoundEvent> STAND_UNSUMMON =
-            registerSoundEvent("stand_unsummon");
-    public static final RegistryObject<SoundEvent> KING_CRIMSON =
-            registerSoundEvent("king_crimson");
-    public static final RegistryObject<SoundEvent> KILLER_QUEEN =
-            registerSoundEvent("killer_queen");
-    public static final RegistryObject<SoundEvent> THREE_FREEZE =
-            registerSoundEvent("three_freeze");
-    public static final RegistryObject<SoundEvent> GREEN_DAY =
-            registerSoundEvent("green_day");
+    // Vanilla 1.7.10 sounds. Some 1.19 sounds don't exist yet and were replaced by the closest fit.
+    public static final String PLAYER_BURP = "random.burp";
+    public static final String D4C = "portal.trigger";             // 1.19: Warden emerge
+    public static final String CHICKEN_DEATH = "mob.chicken.hurt";
+    public static final String WEATHER_REPORT = "ambient.weather.thunder"; // 1.19: Beacon activate
+    public static final String WITHER_DEATH = "mob.wither.death";
+    public static final String WITHER_SPAWN = "mob.wither.spawn";
+    public static final String CREEPER_PRIMED = "creeper.primed";
+    public static final String CHORUS_FRUIT_TELEPORT = "mob.endermen.portal";
 
-    private static RegistryObject<SoundEvent> registerSoundEvent(String name)
+    private static String sound(String name)
     {
-        return SOUND_EVENTS.register(name, () -> new SoundEvent(new ResourceLocation(MinecraftRequiem.MOD_ID, name)));
-    }
-
-    public static void register(IEventBus eventBus)
-    {
-        SOUND_EVENTS.register(eventBus);
+        return MinecraftRequiem.MOD_ID + ":" + name;
     }
 }

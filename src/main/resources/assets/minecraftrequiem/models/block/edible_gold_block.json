@@ -1,6 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "minecraftrequiem:block/edible_gold_block"
-  }
-}

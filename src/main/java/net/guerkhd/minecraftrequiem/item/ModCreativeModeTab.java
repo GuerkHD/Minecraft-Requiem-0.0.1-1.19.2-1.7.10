@@ -1,14 +1,19 @@
 package net.guerkhd.minecraftrequiem.item;
 
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 
-public class ModCreativeModeTab {
-    public static final CreativeModeTab MINECRAFTREQUIEM_TAB = new CreativeModeTab("minecraftrequiemtab")
+public class ModCreativeModeTab
+{
+    public static final CreativeTabs MINECRAFTREQUIEM_TAB = new CreativeTabs("minecraftrequiemtab")
     {
         @Override
-        public ItemStack makeIcon() {
-            return new ItemStack(ModItems.GUERK_INGOT.get());
+        @SideOnly(Side.CLIENT)
+        public Item getTabIconItem()
+        {
+            return ModItems.GUERK_INGOT;
         }
     };
 }

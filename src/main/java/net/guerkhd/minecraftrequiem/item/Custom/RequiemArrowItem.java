@@ -1,31 +1,18 @@
 package net.guerkhd.minecraftrequiem.item.Custom;
 
-import net.guerkhd.minecraftrequiem.client.ClientStandData;
-import net.guerkhd.minecraftrequiem.networking.ModMessages;
-import net.guerkhd.minecraftrequiem.networking.packet.ArrowC2SPacket;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
+import net.guerkhd.minecraftrequiem.stand.StandManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class RequiemArrowItem extends Item
 {
-    public RequiemArrowItem(Properties properties)
-    {
-        super(properties);
-    }
-
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand)
+    public ItemStack onItemRightClick(ItemStack stack, World level, EntityPlayer player)
     {
-        //if(!level.isClientSide && hand == InteractionHand.MAIN_HAND && !ClientStandData.getStandUser())
-        //{
-        //    ModMessages.sendToServer(new ArrowC2SPacket());
-        //    player.getCooldowns().addCooldown(this, 20);
-        //}
-
-        return super.use(level, player, hand);
+        if(!level.isRemote && player instanceof EntityPlayerMP) StandManager.giveStand((EntityPlayerMP) player);
+        return stack;
     }
 }

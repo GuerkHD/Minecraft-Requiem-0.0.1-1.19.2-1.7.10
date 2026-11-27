@@ -1,50 +1,50 @@
 {
   "three_freeze": {
-    "subtitle": "sounds.minecraftrequiem.three_freeze",
+    "category": "player",
     "sounds": [
-      "minecraftrequiem:three_freeze"
+      "three_freeze"
     ]
   },
   "c_moon": {
-    "subtitle": "sounds.minecraftrequiem.c_moon",
+    "category": "player",
     "sounds": [
-      "minecraftrequiem:c_moon"
+      "c_moon"
     ]
   },
   "killer_queen": {
-    "subtitle": "sounds.minecraftrequiem.killer_queen",
+    "category": "player",
     "sounds": [
-      "minecraftrequiem:killer_queen"
+      "killer_queen"
     ]
   },
   "king_crimson": {
-    "subtitle": "sounds.minecraftrequiem.king_crimson",
+    "category": "player",
     "sounds": [
-      "minecraftrequiem:king_crimson"
+      "king_crimson"
     ]
   },
   "stand_summon": {
-    "subtitle": "sounds.minecraftrequiem.stand_summon",
+    "category": "player",
     "sounds": [
-      "minecraftrequiem:stand_summon"
+      "stand_summon"
     ]
   },
   "stand_unsummon": {
-    "subtitle": "sounds.minecraftrequiem.stand_unsummon",
+    "category": "player",
     "sounds": [
-      "minecraftrequiem:stand_unsummon"
+      "stand_unsummon"
     ]
   },
   "green_day": {
-    "subtitle": "sounds.minecraftrequiem.green_day",
+    "category": "player",
     "sounds": [
-      "minecraftrequiem:green_day"
+      "green_day"
     ]
   },
   "za_warudo": {
-    "subtitle": "sounds.minecraftrequiem.za_warudo",
+    "category": "player",
     "sounds": [
-      "minecraftrequiem:za_warudo"
+      "za_warudo"
     ]
   }
 }

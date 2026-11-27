@@ -1,29 +1,12 @@
 package net.guerkhd.minecraftrequiem.effect;
 
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.entity.LivingEntity;
-
-public class ConstipationEffect extends MobEffect
+/**
+ * Eating is blocked in ModEvents while this effect is active.
+ */
+public class ConstipationEffect extends ModPotion
 {
-    public ConstipationEffect(MobEffectCategory mobEffectCategory, int color)
+    public ConstipationEffect(int id, boolean isBadEffect, int color)
     {
-        super(mobEffectCategory, color);
-    }
-
-    @Override
-    public void applyEffectTick(LivingEntity plivingEntity, int pAmplifier)
-    {
-        if(!plivingEntity.level.isClientSide())
-        {
-            //Nothing to see here
-        }
-        super.applyEffectTick(plivingEntity, pAmplifier);
-    }
-
-    @Override
-    public boolean isDurationEffectTick(int pDuration, int pAmplifier)
-    {
-        return true;
+        super(id, isBadEffect, color, "constipation");
     }
 }

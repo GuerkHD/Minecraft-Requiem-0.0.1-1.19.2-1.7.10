@@ -1,17 +1,18 @@
 package net.guerkhd.minecraftrequiem.networking;
 
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.relauncher.Side;
 import net.guerkhd.minecraftrequiem.MinecraftRequiem;
-import net.guerkhd.minecraftrequiem.networking.packet.*;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.guerkhd.minecraftrequiem.networking.packet.AbilityC2SPacket;
+import net.guerkhd.minecraftrequiem.networking.packet.StandC2SPacket;
+import net.guerkhd.minecraftrequiem.networking.packet.StandDataSyncS2CPacket;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 public class ModMessages
 {
-    private static SimpleChannel INSTANCE;
+    private static SimpleNetworkWrapper INSTANCE;
 
     private static int packetID = 0;
 
@@ -22,70 +23,21 @@ public class ModMessages
 
     public static void register()
     {
-        SimpleChannel net = NetworkRegistry.ChannelBuilder
-                .named(new ResourceLocation(MinecraftRequiem.MOD_ID, "messages"))
-                .networkProtocolVersion(() -> "1.0")
-                .clientAcceptedVersions(s -> true)
-                .serverAcceptedVersions(s -> true)
-                .simpleChannel();
+        INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(MinecraftRequiem.MOD_ID);
 
-        INSTANCE = net;
+        INSTANCE.registerMessage(StandC2SPacket.Handler.class, StandC2SPacket.class, id(), Side.SERVER);
+        INSTANCE.registerMessage(AbilityC2SPacket.Handler.class, AbilityC2SPacket.class, id(), Side.SERVER);
 
-        net.messageBuilder(StandC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(StandC2SPacket::new)
-                .encoder(StandC2SPacket::toBytes)
-                .consumerMainThread(StandC2SPacket::handle)
-                .add();
-        net.messageBuilder(ArrowC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(ArrowC2SPacket::new)
-                .encoder(ArrowC2SPacket::toBytes)
-                .consumerMainThread(ArrowC2SPacket::handle)
-                .add();
-        net.messageBuilder(RemoverC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(RemoverC2SPacket::new)
-                .encoder(RemoverC2SPacket::toBytes)
-                .consumerMainThread(RemoverC2SPacket::handle)
-                .add();
-        net.messageBuilder(AbilityC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(AbilityC2SPacket::new)
-                .encoder(AbilityC2SPacket::toBytes)
-                .consumerMainThread(AbilityC2SPacket::handle)
-                .add();
-
-        net.messageBuilder(StandUserDataSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(StandUserDataSyncS2CPacket::new)
-                .encoder(StandUserDataSyncS2CPacket::toBytes)
-                .consumerMainThread(StandUserDataSyncS2CPacket::handle)
-                .add();
-        net.messageBuilder(StandActiveDataSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(StandActiveDataSyncS2CPacket::new)
-                .encoder(StandActiveDataSyncS2CPacket::toBytes)
-                .consumerMainThread(StandActiveDataSyncS2CPacket::handle)
-                .add();
-        net.messageBuilder(StandIDDataSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(StandIDDataSyncS2CPacket::new)
-                .encoder(StandIDDataSyncS2CPacket::toBytes)
-                .consumerMainThread(StandIDDataSyncS2CPacket::handle)
-                .add();
-        net.messageBuilder(StandBombDataSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(StandBombDataSyncS2CPacket::new)
-                .encoder(StandBombDataSyncS2CPacket::toBytes)
-                .consumerMainThread(StandBombDataSyncS2CPacket::handle)
-                .add();
-        net.messageBuilder(StandMaxYDataSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(StandMaxYDataSyncS2CPacket::new)
-                .encoder(StandMaxYDataSyncS2CPacket::toBytes)
-                .consumerMainThread(StandMaxYDataSyncS2CPacket::handle)
-                .add();
+        INSTANCE.registerMessage(StandDataSyncS2CPacket.Handler.class, StandDataSyncS2CPacket.class, id(), Side.CLIENT);
     }
 
-    public static <MSG> void sendToServer(MSG message)
+    public static void sendToServer(IMessage message)
     {
         INSTANCE.sendToServer(message);
     }
 
-    public static <MSG> void sendToPlayer(MSG message, ServerPlayer player)
+    public static void sendToPlayer(IMessage message, EntityPlayerMP player)
     {
-        INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), message);
+        INSTANCE.sendTo(message, player);
     }
 }
