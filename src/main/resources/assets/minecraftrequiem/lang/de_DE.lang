@@ -15,7 +15,6 @@ item.minecraftrequiem.guerk_hoe.name=Guerk Hacke
 
 tile.minecraftrequiem.guerk_block.name=Guerkblock
 tile.minecraftrequiem.guerk_ore.name=Guerkerz
-tile.minecraftrequiem.edible_gold_block.name=Essbarer Goldblock
 tile.minecraftrequiem.gold_infused_obsidian.name=Gold Besetztes Obsidian
 
 entity.minecraftrequiem.stand.name=Stand

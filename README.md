@@ -33,7 +33,7 @@ Some things don't exist in 1.7.10 and had to be replaced:
 - **Blasting** doesn't exist, only the furnace recipes are left. Item tags became ore dictionary entries
   (`oreGuerk`, `ingotGuerk`, `nuggetGuerk`, `blockGuerk`).
 - **Enchanted golden apple**: 1.7.10 still has the vanilla recipe (8 gold blocks + apple), so the recipe from
-  Edible Blocks of Gold was removed. The Edible Block of Gold stays as food.
+  Edible Blocks of Gold and with it the Edible Block of Gold were removed.
 - **Food Leech** is shown like the vanilla attributes in the tooltip: `+1 Food Leech` below `+5 Attack Damage`.
 - **Levitation** (C-Moon) was added in 1.9, so the mod brings its own Levitation effect with the same behaviour.
 - **Glowing** (Highway To Hell marks the closest entity) was added in 1.9; the closest entity is marked with purple particles instead.

@@ -15,7 +15,6 @@ item.minecraftrequiem.guerk_hoe.name=Guerk Hoe
 
 tile.minecraftrequiem.guerk_block.name=Block of Guerk
 tile.minecraftrequiem.guerk_ore.name=Guerk Ore
-tile.minecraftrequiem.edible_gold_block.name=Edible Block of Gold
 tile.minecraftrequiem.gold_infused_obsidian.name=Gold Infused Obsidian
 
 entity.minecraftrequiem.stand.name=Stand

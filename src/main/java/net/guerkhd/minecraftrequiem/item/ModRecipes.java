@@ -8,8 +8,8 @@ import net.minecraft.item.ItemStack;
 
 /**
  * The 1.19 data pack recipes. Blasting does not exist in 1.7.10, so only the furnace recipes remain.
- * The enchanted golden apple from Edible Blocks of Gold was dropped: 1.7.10 still has the cheaper vanilla recipe
- * (8 gold blocks + apple).
+ * The enchanted golden apple recipe and the Edible Block of Gold were dropped: 1.7.10 still has the cheaper vanilla
+ * recipe (8 gold blocks + apple).
  */
 public class ModRecipes
 {
@@ -22,7 +22,6 @@ public class ModRecipes
         GameRegistry.addRecipe(new ItemStack(ModItems.GUERK_INGOT), "###", "###", "###", '#', ModItems.GUERK_NUGGET);
         GameRegistry.addShapelessRecipe(new ItemStack(ModItems.GUERK_NUGGET, 9), ModItems.GUERK_INGOT);
 
-        GameRegistry.addRecipe(new ItemStack(ModBlocks.EDIBLE_GOLD_BLOCK), "###", "#X#", "###", '#', ModItems.GUERK_INGOT, 'X', Blocks.gold_block);
         GameRegistry.addRecipe(new ItemStack(ModBlocks.GOLD_INFUSED_OBSIDIAN), "###", "#X#", "###", '#', Items.gold_ingot, 'X', Blocks.obsidian);
 
         GameRegistry.addRecipe(new ItemStack(ModItems.GUERK_SWORD), "X", "X", "#", 'X', ModItems.GUERK_INGOT, '#', Items.stick);
