@@ -2,28 +2,52 @@ package net.guerkhd.minecraftrequiem.client.render;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.RenderBiped;
+import net.guerkhd.minecraftrequiem.MinecraftRequiem;
+import net.guerkhd.minecraftrequiem.entity.EntityStand;
+import net.guerkhd.minecraftrequiem.stand.StandType;
+import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 /**
- * The stand body is invisible, only its dyed armor is drawn (like the invisible zombie in 1.19).
+ * Draws each stand with its own skin and model (1.19: an invisible zombie in dyed leather armor).
  */
 @SideOnly(Side.CLIENT)
-public class RenderStand extends RenderBiped
+public class RenderStand extends RenderLiving
 {
-    private static final ResourceLocation TEXTURE = new ResourceLocation("textures/entity/zombie/zombie.png");
+    private final Map<StandType, ModelStand> models = new EnumMap<StandType, ModelStand>(StandType.class);
+    private final Map<StandType, ResourceLocation> textures = new EnumMap<StandType, ResourceLocation>(StandType.class);
 
     public RenderStand()
     {
-        super(new ModelBiped(), 0.5F);
+        super(new ModelStand(StandType.UNKNOWN), 0.3F);
+
+        for(StandType standType : StandType.values())
+        {
+            if(!standType.hasStandEntity()) continue;
+            models.put(standType, new ModelStand(standType));
+            textures.put(standType, new ResourceLocation(MinecraftRequiem.MOD_ID, "textures/entity/stand/" + standType.getTextureName() + ".png"));
+        }
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(EntityLiving entity)
+    public void doRender(EntityLiving entity, double x, double y, double z, float yaw, float partialTicks)
     {
-        // RenderBiped has no texture of its own; it is still bound even though the body is invisible.
-        return TEXTURE;
+        ModelStand model = models.get(((EntityStand) entity).getStandType());
+        // Nothing to draw until the server has told the client which stand it is.
+        if(model == null) return;
+
+        mainModel = model;
+        super.doRender(entity, x, y, z, yaw, partialTicks);
+    }
+
+    @Override
+    protected ResourceLocation getEntityTexture(Entity entity)
+    {
+        return textures.get(((EntityStand) entity).getStandType());
     }
 }
