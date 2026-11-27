@@ -47,6 +47,11 @@ Some things don't exist in 1.7.10 and had to be replaced:
 - **Potion IDs**: 1.7.10 has no effect registry, so the custom effects use IDs 70-76. They can be changed in
   `config/minecraftrequiem-common.cfg` if another mod uses them (client and server must match).
 - **Fire resistant items** don't exist in 1.7.10, so the arrows can burn in lava now.
+- **Stand Remover Arrow**: it had no recipe in 1.19, and dying no longer removes the stand (see below), so it can be made now:
+  put a Requiem Arrow into a furnace with a **Milk Bucket as fuel**. After the usual 10 seconds the arrow turns into a
+  Stand Remover Arrow and an empty bucket is left, like with a Lava Bucket. Other fuels do nothing to the arrow, and milk
+  heats nothing else. The Remover Arrow is used up when it removes a stand; otherwise a Requiem Arrow and one Remover Arrow
+  would allow endless free rerolls.
 - **Stand Arrow XP**: the arrow still needs level 30 and removes the XP needed for level 30. That is 825 XP in 1.7.10 (1395 in 1.19).
 - **Attack strength** (the 1.9 attack cooldown) doesn't exist, so Highway To Hell without a sword or tool always deals 1 damage.
 - The config is a Forge `.cfg` file now: `config/minecraftrequiem-common.cfg`. The empty client config was dropped.

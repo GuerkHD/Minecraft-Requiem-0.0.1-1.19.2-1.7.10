@@ -87,9 +87,9 @@ public class StandManager
     }
 
     /**
-     * Stand Remover Arrow.
+     * Stand Remover Arrow. Returns true if the player had a stand.
      */
-    public static void removeStand(EntityPlayerMP player)
+    public static boolean removeStand(EntityPlayerMP player)
     {
         WorldServer level = player.getServerForPlayer();
         PlayerStand stand = PlayerStand.get(player);
@@ -106,7 +106,9 @@ public class StandManager
             ChatComponentTranslation message = new ChatComponentTranslation("message.minecraftrequiem.stand_remover_messeage");
             message.getChatStyle().setItalic(true).setColor(EnumChatFormatting.GRAY);
             player.addChatMessage(message);
+            return true;
         }
+        return false;
     }
 
     private static void deactivate(WorldServer level, EntityPlayerMP player, PlayerStand stand, boolean alsoClearRain)
