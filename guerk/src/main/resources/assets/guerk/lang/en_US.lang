@@ -1,0 +1,24 @@
+item.guerk.guerk_ingot.name=Guerk Ingot
+item.guerk.raw_guerk.name=Raw Guerk
+item.guerk.guerk_nugget.name=Guerk Nugget
+
+item.guerk.guerk_sword.name=Guerk Sword
+item.guerk.guerk_pickaxe.name=Guerk Pickaxe
+item.guerk.guerk_axe.name=Guerk Axe
+item.guerk.guerk_shovel.name=Guerk Shovel
+item.guerk.guerk_hoe.name=Guerk Hoe
+
+tile.guerk.guerk_block.name=Block of Guerk
+tile.guerk.guerk_ore.name=Guerk Ore
+
+effect.guerk.constipation=Constipation
+
+attribute.name.guerk.foodLeech=Food Leech
+
+itemGroup.guerktab=Guerk
+
+fluid.guerk.molten_guerk=Molten Guerk
+material.guerk.guerk=Guerk
+material.guerk.guerk.ability=Hungry
+tooltip.guerk.snack=Snack (Sneak + Right Click)
+tooltip.guerk.constipation_on_hit=Constipation on Hit

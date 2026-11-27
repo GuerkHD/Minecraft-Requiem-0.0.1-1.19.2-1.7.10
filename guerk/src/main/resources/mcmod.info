@@ -1,0 +1,16 @@
+[
+{
+  "modid": "guerk",
+  "name": "Guerk",
+  "description": "An edible ore, food themed tools and support for other mods' machines.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["GuerkHD"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

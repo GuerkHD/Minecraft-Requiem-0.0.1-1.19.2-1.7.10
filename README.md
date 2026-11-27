@@ -9,8 +9,21 @@ I created this mod as a fun little add-on to a modpack I'm going to play with fr
 
 ## Minecraft 1.7.10
 
-This branch is a port of the 1.19.2 version (`1.0.2-1.19.2`) to Minecraft 1.7.10 / Forge 10.13.4.1614.
-The 1.7.10 version has its own version numbers, starting at 0.0.1 for the plain port.
+This branch is a port of the 1.19.2 version (`1.0.2-1.19.2`) to Minecraft 1.7.10 / Forge 10.13.4.1614,
+split into two independent mods. Each one works without the other, and together they behave exactly like the
+single 1.7.10 mod before the split.
+
+| Folder | Mod (working titles) | Mod ID | Contents |
+| --- | --- | --- | --- |
+| `guerk/` | Guerk | `guerk` | Guerk Ore, Raw Guerk, ingot, nugget, block, tools, Food Leech, Constipation, support for other mods |
+| `stands/` | Minecraft Requiem | `minecraftrequiem` | The stands, the arrows and Gold Infused Obsidian (only used for the arrow tips) |
+
+What changed with the split:
+
+- Each mod has its own creative tab and config file: `config/guerk-common.cfg` (ore spawn, Constipation potion ID,
+  Tinkers' material ID) and `config/minecraftrequiem-common.cfg` (stand costs, Killer Queen, stand potion IDs).
+- The Guerk items moved to the mod ID `guerk` (e.g. `guerk:guerk_ingot`). Worlds made with the combined 1.7.10 version lose them.
+- The 1.7.10 versions have their own numbers: 0.1.0 was the combined mod, 0.2.0 is the split.
 
 ### Building
 
@@ -18,11 +31,12 @@ The 1.7.10 version has its own version numbers, starting at 0.0.1 for the plain 
 ./gradlew build
 ```
 
-The mod jar ends up in `build/libs/minecraftrequien-0.1.0-1.7.10.jar` (the `-dev` jar is for development only).
+The mod jars end up in `guerk/build/libs/guerk-0.2.0-1.7.10.jar` and `stands/build/libs/minecraftrequiem-0.2.0-1.7.10.jar`
+(the `-dev` jars are for development only).
 The build uses [RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle), so a current Gradle works.
 Minecraft 1.7.10 needs Java 8; Gradle downloads a Java 8 JDK by itself if none is installed.
 
-`./gradlew runClient` starts a development client with the mod.
+`./gradlew :guerk:runClient` or `./gradlew :stands:runClient` starts a development client with that mod.
 
 ### Differences to the 1.19.2 version
 
@@ -44,14 +58,14 @@ Some things don't exist in 1.7.10 and had to be replaced:
 - **Stands** are their own invisible entity now (1.19 used an invisible zombie with NoAI, which 1.7.10 can't do).
   The stand isn't saved with the world anymore; it gets summoned again automatically after joining, respawning or changing dimension.
 - **Sounds**: Warden emerge (D4C) became the nether portal sound, Beacon activate (Weather Report) became thunder.
-- **Potion IDs**: 1.7.10 has no effect registry, so the custom effects use IDs 70-76. They can be changed in
-  `config/minecraftrequiem-common.cfg` if another mod uses them (client and server must match).
+- **Potion IDs**: 1.7.10 has no effect registry, so the custom effects use IDs 70-76 (Constipation: 75, in the Guerk mod).
+  They can be changed in the config files if another mod uses them (client and server must match).
 - **Fire resistant items** don't exist in 1.7.10, so the arrows can burn in lava now.
 - **Stand Arrow XP**: the arrow still needs level 30 and removes the XP needed for level 30. That is 825 XP in 1.7.10 (1395 in 1.19).
 - **Attack strength** (the 1.9 attack cooldown) doesn't exist, so Highway To Hell without a sword or tool always deals 1 damage.
-- The config is a Forge `.cfg` file now: `config/minecraftrequiem-common.cfg`. The empty client config was dropped.
+- The configs are Forge `.cfg` files now (see above). The empty client config was dropped.
 
-### Other mods
+### Other mods (Guerk)
 
 None of these are required; each integration only runs if the mod is installed.
 
@@ -65,7 +79,7 @@ None of these are required; each integration only runs if the mod is installed.
 | Applied Energistics 2 | Quartz Grindstone: ore -> 1 Raw Guerk + 90 % chance of a second, ingot -> 1 Raw Guerk |
 | Railcraft | Rock Crusher: ore -> 2 Raw Guerk |
 
-The Tinkers' material ID (default 218) can be changed in `config/minecraftrequiem-common.cfg` if it clashes with another addon.
+The Tinkers' material ID (default 218) can be changed in `config/guerk-common.cfg` if it clashes with another addon.
 
 Some 1.19 bugs were fixed along the way:
 
