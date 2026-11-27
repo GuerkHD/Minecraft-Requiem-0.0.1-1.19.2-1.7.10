@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 /**
- * Made from a Requiem Arrow in a furnace with a Milk Bucket as fuel (see RemoverArrowFurnace).
+ * Crafted from a Requiem Arrow and a Milk Bucket.
  * Used up when it removes a stand; otherwise a Requiem Arrow and one Remover Arrow would allow endless free rerolls.
  */
 public class StandRemoveArrowItem extends Item
