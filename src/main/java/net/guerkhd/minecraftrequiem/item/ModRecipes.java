@@ -34,6 +34,8 @@ public class ModRecipes
         GameRegistry.addRecipe(new ItemStack(ModItems.REQUIEM_ARROW_TIP), " X ", "X#X", "XYX", 'X', ModBlocks.GOLD_INFUSED_OBSIDIAN, '#', Items.nether_star, 'Y', enchantedGoldenApple.copy());
         GameRegistry.addRecipe(new ItemStack(ModItems.STAND_ARROW), "X", "#", "Y", 'X', ModItems.STAND_ARROW_TIP, '#', Items.stick, 'Y', Items.feather);
         GameRegistry.addRecipe(new ItemStack(ModItems.REQUIEM_ARROW), "X", "#", "Y", 'X', ModItems.REQUIEM_ARROW_TIP, '#', Items.stick, 'Y', Items.feather);
+        // New in the 1.7.10 version: the Remover Arrow had no recipe. The empty bucket goes back into the inventory, as with cake.
+        GameRegistry.addShapelessRecipe(new ItemStack(ModItems.REMOVER_ARROW), ModItems.REQUIEM_ARROW, Items.milk_bucket);
 
         GameRegistry.addSmelting(ModItems.RAW_GUERK, new ItemStack(ModItems.GUERK_INGOT), 0.7f);
         GameRegistry.addSmelting(ModBlocks.GUERK_ORE, new ItemStack(ModItems.GUERK_INGOT), 0.7f);
