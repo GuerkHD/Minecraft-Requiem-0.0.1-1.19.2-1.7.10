@@ -36,6 +36,7 @@ public class ModTickEvents
         if(stand == null) return;
 
         StandManager.ensureStandEntity((EntityPlayerMP) player, stand);
+        clearLostBomb(player, stand);
         refreshThreeFreeze(player, stand);
         greenDay(player, stand);
         glowClosest(player, stand);
@@ -76,6 +77,25 @@ public class ModTickEvents
             player.removePotionEffect(ModEffects.GREEN_DAY.id);
             player.addPotionEffect(new PotionEffect(ModEffects.GREEN_DAY.id, duration, amplifier, true));
         }
+    }
+
+    /**
+     * Killer Queen: once no bomb is left in range (the target died, despawned or got too far away), a new one can be placed.
+     * 1.19 kept the bomb marked as placed until it was detonated into nothing, which cost food.
+     * Same 50 block range in which ModEvents keeps bombs alive and StandAbilities detonates them.
+     */
+    private static void clearLostBomb(EntityPlayer player, PlayerStand stand)
+    {
+        if(!stand.getBomb() || player.ticksExisted % 10 != 0) return;
+
+        List<EntityLivingBase> list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, player.boundingBox.expand(50, 50, 50));
+        for(EntityLivingBase ent : list)
+        {
+            if(ent.isPotionActive(ModEffects.BOMB)) return;
+        }
+
+        stand.setBomb(false);
+        stand.sync();
     }
 
     private static void refreshThreeFreeze(EntityPlayer player, PlayerStand stand)

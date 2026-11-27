@@ -77,3 +77,5 @@ Some 1.19 bugs were fixed along the way:
 - The Stand Arrow's XP cost is taken on the server (1.19 only removed it on the client, so it came back after relogging).
   It only kills players without a stand, as in the commented out code of the 1.19 item.
 - All player data is synced with one packet instead of five.
+- Killer Queen: if the bombed target dies, despawns or gets out of range, a new bomb can be placed right away.
+  In 1.19 the bomb stayed marked as placed until it was detonated into nothing, which cost food.
