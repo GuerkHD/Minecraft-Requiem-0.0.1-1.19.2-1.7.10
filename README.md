@@ -10,6 +10,7 @@ I created this mod as a fun little add-on to a modpack I'm going to play with fr
 ## Minecraft 1.7.10
 
 This branch is a port of the 1.19.2 version (`1.0.2-1.19.2`) to Minecraft 1.7.10 / Forge 10.13.4.1614.
+The 1.7.10 version has its own version numbers, starting at 0.0.1 for the plain port.
 
 ### Building
 
@@ -17,7 +18,7 @@ This branch is a port of the 1.19.2 version (`1.0.2-1.19.2`) to Minecraft 1.7.10
 ./gradlew build
 ```
 
-The mod jar ends up in `build/libs/minecraftrequien-1.0.2-1.7.10.jar` (the `-dev` jar is for development only).
+The mod jar ends up in `build/libs/minecraftrequien-0.1.0-1.7.10.jar` (the `-dev` jar is for development only).
 The build uses [RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle), so a current Gradle works.
 Minecraft 1.7.10 needs Java 8; Gradle downloads a Java 8 JDK by itself if none is installed.
 
