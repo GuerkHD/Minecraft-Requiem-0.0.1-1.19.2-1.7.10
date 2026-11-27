@@ -34,9 +34,11 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 processResources {
-    inputs.property 'version', project.version
+    // Read the version now: using the project inside the task action is deprecated in Gradle 8 and fails in Gradle 10.
+    def modVersion = project.version
+    inputs.property 'version', modVersion
     inputs.property 'mcversion', '1.7.10'
     filesMatching('mcmod.info') {
-        expand('version': project.version, 'mcversion': '1.7.10')
+        expand('version': modVersion, 'mcversion': '1.7.10')
     }
 }

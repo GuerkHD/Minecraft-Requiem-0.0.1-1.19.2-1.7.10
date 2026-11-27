@@ -34,7 +34,7 @@ public class StandManager
             playSound(level, player, ModSounds.STAND_SUMMON, 1f);
 
             stand.activateStand();
-            if(stand.getStandType() == StandType.MAGICIANS_RED) player.addPotionEffect(new PotionEffect(Potion.fireResistance.id, 36000, 0, true));
+            addStandEffects(player, stand);
             stand.sync();
 
             ensureStandEntity(player, stand);
@@ -46,6 +46,20 @@ public class StandManager
             deactivate(level, player, stand, false);
         }
         else player.addChatMessage(new ChatComponentText("Skill issue."));
+    }
+
+    /**
+     * Death and leaving the End clear all effects, but the stand stays summoned (see ModEvents.onPlayerCloned).
+     */
+    public static void onRespawn(EntityPlayerMP player)
+    {
+        PlayerStand stand = PlayerStand.get(player);
+        if(stand != null && stand.getStandUser() && stand.getStandActive()) addStandEffects(player, stand);
+    }
+
+    private static void addStandEffects(EntityPlayerMP player, PlayerStand stand)
+    {
+        if(stand.getStandType() == StandType.MAGICIANS_RED) player.addPotionEffect(new PotionEffect(Potion.fireResistance.id, 36000, 0, true));
     }
 
     /**

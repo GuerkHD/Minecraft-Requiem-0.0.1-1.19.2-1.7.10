@@ -48,6 +48,7 @@ Some things don't exist in 1.7.10 and had to be replaced:
   `config/minecraftrequiem-common.cfg` if another mod uses them (client and server must match).
 - **Fire resistant items** don't exist in 1.7.10, so the arrows can burn in lava now.
 - **Stand Arrow XP**: the arrow still needs level 30 and removes the XP needed for level 30. That is 825 XP in 1.7.10 (1395 in 1.19).
+- **Attack strength** (the 1.9 attack cooldown) doesn't exist, so Highway To Hell without a sword or tool always deals 1 damage.
 - The config is a Forge `.cfg` file now: `config/minecraftrequiem-common.cfg`. The empty client config was dropped.
 
 ### Other mods
@@ -69,6 +70,9 @@ The Tinkers' material ID (default 218) can be changed in `config/minecraftrequie
 Some 1.19 bugs were fixed along the way:
 
 - The stand is kept on death now (the 1.19 version copied the data from the old player onto itself).
+  Magicians Red gets its fire resistance back after respawning.
+- The arrows are handled by the server. In 1.19 the client sent a packet when it used an arrow, and the server
+  trusted it without checking whether the player held one.
 - The ore vein config values are actually used now (1.19 always used the defaults).
 - The Stand Arrow's XP cost is taken on the server (1.19 only removed it on the client, so it came back after relogging).
   It only kills players without a stand, as in the commented out code of the 1.19 item.

@@ -42,6 +42,12 @@ public class ModTickEvents
     }
 
     @SubscribeEvent
+    public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
+    {
+        if(event.player instanceof EntityPlayerMP) StandManager.onRespawn((EntityPlayerMP) event.player);
+    }
+
+    @SubscribeEvent
     public void onItemPickup(PlayerEvent.ItemPickupEvent event)
     {
         EntityPlayer player = event.player;
