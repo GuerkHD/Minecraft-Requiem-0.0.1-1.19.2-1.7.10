@@ -50,12 +50,15 @@ public class StandManager
     }
 
     /**
-     * Death and leaving the End clear all effects, but the stand stays summoned (see ModEvents.onPlayerCloned).
+     * Called every tick: Magicians Red's fire resistance lasts as long as the stand is summoned.
+     * 1.19 only gave it once when summoning, so it was gone after 30 minutes, after drinking milk and after dying.
      */
-    public static void onRespawn(EntityPlayerMP player)
+    public static void keepStandEffects(EntityPlayerMP player, PlayerStand stand)
     {
-        PlayerStand stand = PlayerStand.get(player);
-        if(stand != null && stand.getStandUser() && stand.getStandActive()) addStandEffects(player, stand);
+        if(!stand.getStandUser() || !stand.getStandActive() || stand.getStandType() != StandType.MAGICIANS_RED) return;
+
+        PotionEffect fireResistance = player.getActivePotionEffect(Potion.fireResistance);
+        if(fireResistance == null || fireResistance.getDuration() < 1200) addStandEffects(player, stand);
     }
 
     private static void addStandEffects(EntityPlayerMP player, PlayerStand stand)
@@ -101,6 +104,9 @@ public class StandManager
             if(stand.getStandActive()) deactivate(level, player, stand, true);
 
             stand.undoStandUser();
+            // Killer Queen's bombs go out within a second (ModEvents.refreshBomb). In 1.19 they and Sheer Heart Attack
+            // stayed forever, and no one could detonate them anymore.
+            stand.setBomb(false);
             stand.sync();
 
             ChatComponentTranslation message = new ChatComponentTranslation("message.minecraftrequiem.stand_remover_messeage");

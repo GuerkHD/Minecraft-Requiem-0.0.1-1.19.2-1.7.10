@@ -7,6 +7,7 @@ import net.guerkhd.guerk.compat.TinkersCompat;
 import net.guerkhd.guerk.effect.ModEffects;
 import net.guerkhd.guerk.item.ModItems;
 import net.guerkhd.guerk.util.FoodHelper;
+import net.minecraft.block.BlockCake;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -58,6 +59,15 @@ public class ModEvents
         {
             event.useBlock = Event.Result.DENY;
             event.useItem = Event.Result.DENY;
+            event.setCanceled(true);
+        }
+
+        // Constipation: cake is eaten by clicking the block, so it isn't covered by the item events below. Both sides,
+        // so the client doesn't even try.
+        if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK && event.entityPlayer.isPotionActive(ModEffects.CONSTIPATION)
+                && event.world.getBlock(event.x, event.y, event.z) instanceof BlockCake)
+        {
+            event.useBlock = Event.Result.DENY;
             event.setCanceled(true);
         }
     }

@@ -22,7 +22,9 @@ public class ModEffects
     {
         extendPotionArray(MAX_POTION_ID + 1);
 
-        CONSTIPATION = new ConstipationEffect(id(GuerkConfig.CONSTIPATION_ID, "constipation"), false, 0);
+        // Harmful: 1.19 registered it as beneficial by mistake (copied from Epitaph). Mods that cure bad effects check this.
+        // Color 0: 1.7.10 spawns no swirl particles for it, like 1.19, which hid them.
+        CONSTIPATION = new ConstipationEffect(id(GuerkConfig.CONSTIPATION_ID, "constipation"), true, 0);
     }
 
     /**

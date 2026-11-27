@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -167,12 +168,13 @@ public class ModEvents
     }
 
     /**
-     * The spot 1.5 blocks behind an entity.
+     * The spot 1.5 blocks behind an entity. Only the direction it faces counts, not where it looks up or down:
+     * with the look vector (1.19), an attacker looking down at its target had that spot right inside itself.
      */
     private static Vec3 behindTP(EntityLivingBase target, double yOffset)
     {
-        Vec3 view = target.getLook(1f);
-        return Vec3.createVectorHelper(target.posX - view.xCoord * 1.5, target.boundingBox.minY + yOffset, target.posZ - view.zCoord * 1.5);
+        float yaw = target.rotationYaw * (float) Math.PI / 180F;
+        return Vec3.createVectorHelper(target.posX + MathHelper.sin(yaw) * 1.5, target.boundingBox.minY + yOffset, target.posZ - MathHelper.cos(yaw) * 1.5);
     }
 
     static StandType getStandType(EntityPlayer player)
@@ -190,7 +192,7 @@ public class ModEvents
     static boolean getBomb(EntityPlayer player)
     {
         PlayerStand stand = PlayerStand.get(player);
-        return stand != null && stand.getBomb();
+        return stand != null && stand.getStandUser() && stand.getStandType() == StandType.KILLER_QUEEN && stand.getBomb();
     }
 
     static boolean isStand(Entity entity)
