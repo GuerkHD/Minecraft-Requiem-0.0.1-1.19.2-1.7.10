@@ -1,7 +1,10 @@
-"""The Guerk palette: the five colors of the Guerk Ingot texture, used by every Guerk texture.
+"""The Guerk palette: the five colors of the Guerk Ingot texture, for every Guerk texture added with the port.
 
-    python3 tools/guerk_palette.py check    lists Guerk-colored pixels that are not exactly in the palette
-    python3 tools/guerk_palette.py fix      snaps those pixels in the Guerk textures to the closest palette color
+The original item and block textures are drawn in these colors already (the Guerk Block adds its own in-between
+shades on purpose, five colors are too coarse for it), so they are left as they are and not checked here.
+
+    python3 tools/guerk_palette.py check    lists Guerk-colored pixels of the new textures that are not exactly in the palette
+    python3 tools/guerk_palette.py fix      snaps those pixels to the closest palette color
     python3 tools/guerk_palette.py molten   generates the Molten Guerk fluid textures (Tinkers' Construct)
 
 Run from the repository root. Needs Pillow. White highlights (#FFFFFF) are left alone on purpose.
@@ -18,12 +21,8 @@ from PIL import Image
 GUERK = ['#660066', '#800080', '#BE29EC', '#D896FF', '#EFBBFF']
 
 TEXTURES = 'src/main/resources/assets/minecraftrequiem/textures'
-# Textures that are (partly) made of Guerk. The rest of their pixels (stone, sticks, ...) isn't touched.
-GUERK_TEXTURES = ['items/guerk_ingot.png', 'items/guerk_nugget.png', 'items/raw_guerk.png',
-                  'items/guerk_sword.png', 'items/guerk_pickaxe.png', 'items/guerk_axe.png',
-                  'items/guerk_shovel.png', 'items/guerk_hoe.png',
-                  'blocks/guerk_block.png', 'blocks/guerk_ore.png',
-                  'blocks/molten_guerk_still.png', 'blocks/molten_guerk_flow.png']
+# Guerk textures added with the port. Add new ones here; other pixels in them (stone, sticks, ...) aren't touched.
+GUERK_TEXTURES = ['blocks/molten_guerk_still.png', 'blocks/molten_guerk_flow.png']
 # Pixels further away than this (CIELAB delta E) from every palette color aren't Guerk (e.g. white highlights).
 MAX_DISTANCE = 15
 
@@ -81,7 +80,7 @@ def check():
         for color, (target, distance, count) in sorted(off_palette(os.path.join(TEXTURES, name)).items()):
             clean = False
             print('%-32s #%02X%02X%02X x%-3d -> #%02X%02X%02X (delta E %.1f)' % ((name,) + color + (count,) + target + (distance,)))
-    if clean: print('All Guerk textures use the palette.')
+    if clean: print('All new Guerk textures use the palette.')
     return clean
 
 

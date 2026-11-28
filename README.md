@@ -26,9 +26,11 @@ Minecraft 1.7.10 needs Java 8; Gradle downloads a Java 8 JDK by itself if none i
 
 ### Textures
 
-All Guerk textures use the five colors of the Guerk Ingot: `#660066`, `#800080`, `#BE29EC`, `#D896FF` and `#EFBBFF`
-(plus white highlights). `python3 tools/guerk_palette.py check` lists Guerk pixels that are off the palette, `fix` snaps
-them to the closest palette color, and `molten` generates the Molten Guerk textures for Tinkers' Construct.
+The Guerk palette is the five colors of the Guerk Ingot: `#660066`, `#800080`, `#BE29EC`, `#D896FF` and `#EFBBFF`.
+The original item and block textures are drawn in it (the Guerk Block adds its own in-between shades on purpose).
+Everything added with the port uses only these colors (plus white highlights): the Molten Guerk textures and the
+Tinkers' Construct tool part color `#BE29EC`. `python3 tools/guerk_palette.py check` lists off-palette pixels in those new
+textures, `fix` snaps them to the closest palette color, and `molten` generates the Molten Guerk textures.
 The stand skins and Sheer Heart Attack come from `tools/stand_textures.py`. Both scripts need Pillow.
 
 ### Differences to the 1.19.2 version
@@ -48,7 +50,7 @@ Some things don't exist in 1.7.10 and had to be replaced:
 - **Levitation** (C-Moon) was added in 1.9, so the mod brings its own Levitation effect with the same behaviour,
   including its own icon and the exception from the server's "kicked for floating too long" check.
 - **Glowing** (Highway To Hell marks the closest entity) was added in 1.9; the closest entity is marked with purple particles instead.
-- **Turtles** don't exist, so Sheer Heart Attack has its own model now: a small tank with a skull on the front, like in the series.
+- **Turtles** don't exist, so Sheer Heart Attack has its own model now: a small blue-green tank with a white skull on the front and an orange-brown knob on the back, like in the series.
 - **Stands** are their own entity now (1.19 used an invisible zombie with NoAI, which 1.7.10 can't do), and instead of
   dyed leather armor every stand has its own skin (`textures/entity/stand/`). D4C, Killer Queen and Magicians Red have
   extra model parts (ears, cat ears, beak).

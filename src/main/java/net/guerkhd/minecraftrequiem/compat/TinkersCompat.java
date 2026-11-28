@@ -35,7 +35,6 @@ public class TinkersCompat
     private static final String FLUID_TYPE = "Guerk";
     private static final String FLUID_NAME = "guerk.molten";
     private static final int MELTING_TEMPERATURE = 500;
-    /** Tool part tint: #BE29EC from the Guerk palette (the five Guerk Ingot colors, see tools/guerk_palette.py). */
     /** Tints the Tinkers tool parts. #BE29EC from the Guerk palette (the Guerk Ingot colors, see tools/guerk_palette.py). */
     private static final int COLOR = 0xBE29EC;
 
