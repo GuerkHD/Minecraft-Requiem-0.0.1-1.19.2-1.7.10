@@ -7,15 +7,15 @@ These both tie in together, because the stands use food and hunger as their main
 
 I created this mod as a fun little add-on to a modpack I'm going to play with friends and to start to learning modding in general. Don't take it to serious.
 
-## Minecraft 1.7.10: Guerk
+## Minecraft 1.7.10: Gastrolithic Guerk
 
-This branch is the Guerk part of the 1.19.2 version (`1.0.2-1.19.2`), ported to Minecraft 1.7.10 / Forge 10.13.4.1614:
-Guerk Ore, Raw Guerk, ingot, nugget, block, tools, Food Leech, Constipation and the support for other mods (mod ID `guerk`).
+This branch is Gastrolithic Guerk, the Guerk part of the 1.19.2 version (`1.0.2-1.19.2`), ported to Minecraft 1.7.10 / Forge 10.13.4.1614:
+Guerk Ore, Raw Guerk, ingot, nugget, block, tools, Food Leech, Constipation and the support for other mods (mod ID `gastrolithicguerk`).
 The stands are their own mod, Minecraft Requiem, on the branch `claude/stands-1.7.10`. Each mod works without the
 other; together they behave like the 1.19 mod.
 
-The Guerk items use the mod ID `guerk` (e.g. `guerk:guerk_ingot`). The first, combined 1.7.10 version (0.1.0) had them
-under `minecraftrequiem`, so worlds made with it lose them.
+The items use the mod ID `gastrolithicguerk` (e.g. `gastrolithicguerk:guerk_ingot`). Earlier 1.7.10 versions had them under
+`minecraftrequiem` (0.1.0, combined with the stands) and `guerk` (0.2.0), so worlds made with those lose them.
 
 ### Building
 
@@ -23,7 +23,7 @@ under `minecraftrequiem`, so worlds made with it lose them.
 ./gradlew build
 ```
 
-The mod jar ends up in `build/libs/guerk-0.2.0-1.7.10.jar` (the `-dev` jar is for development only).
+The mod jar ends up in `build/libs/gastrolithicguerk-0.3.0-1.7.10.jar` (the `-dev` jar is for development only).
 The build uses [RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle), so a current Gradle works.
 Minecraft 1.7.10 needs Java 8; Gradle downloads a Java 8 JDK by itself if none is installed.
 `./gradlew runClient` starts a development client with the mod.
@@ -52,7 +52,7 @@ Some things don't exist in 1.7.10 and had to be replaced:
 - **Food Leech** is shown like the vanilla attributes in the tooltip: `+1 Food Leech` below `+5 Attack Damage`.
 - **Potion IDs**: 1.7.10 has no effect registry, so Constipation uses potion ID 75. It can be changed in the config
   file if another mod uses it (client and server must match).
-- The config is a Forge `.cfg` file now: `config/guerk-common.cfg` (ore spawn, Constipation potion ID, Tinkers' material ID).
+- The config is a Forge `.cfg` file now: `config/gastrolithicguerk-common.cfg` (ore spawn, Constipation potion ID, Tinkers' material ID).
 
 ### Other mods
 
@@ -68,7 +68,7 @@ None of these are required; each integration only runs if the mod is installed.
 | Applied Energistics 2 | Quartz Grindstone: ore -> 1 Raw Guerk + 90 % chance of a second, ingot -> 1 Raw Guerk |
 | Railcraft | Rock Crusher: ore -> 2 Raw Guerk |
 
-The Tinkers' material ID (default 218) can be changed in `config/guerk-common.cfg` if it clashes with another addon.
+The Tinkers' material ID (default 218) can be changed in `config/gastrolithicguerk-common.cfg` if it clashes with another addon.
 
 ### Fixed 1.19 bugs
 

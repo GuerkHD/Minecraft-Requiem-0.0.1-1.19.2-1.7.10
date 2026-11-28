@@ -1,0 +1,24 @@
+item.gastrolithicguerk.guerk_ingot.name=Guerkbarren
+item.gastrolithicguerk.raw_guerk.name=Rohguerk
+item.gastrolithicguerk.guerk_nugget.name=Guerkklumpen
+
+item.gastrolithicguerk.guerk_sword.name=Guerk Schwert
+item.gastrolithicguerk.guerk_pickaxe.name=Guerk Spitzhacke
+item.gastrolithicguerk.guerk_axe.name=Guerk Axt
+item.gastrolithicguerk.guerk_shovel.name=Guerk Schaufel
+item.gastrolithicguerk.guerk_hoe.name=Guerk Hacke
+
+tile.gastrolithicguerk.guerk_block.name=Guerkblock
+tile.gastrolithicguerk.guerk_ore.name=Guerkerz
+
+effect.gastrolithicguerk.constipation=Verstopfung
+
+attribute.name.gastrolithicguerk.foodLeech=Nahrungsentzug
+
+itemGroup.gastrolithicguerk=Gastrolithic Guerk
+
+fluid.gastrolithicguerk.molten_guerk=Geschmolzenes Guerk
+material.gastrolithicguerk.guerk=Guerk
+material.gastrolithicguerk.guerk.ability=Hungrig
+tooltip.gastrolithicguerk.snack=Snack (Schleichen + Rechtsklick)
+tooltip.gastrolithicguerk.constipation_on_hit=Verstopfung beim Treffer

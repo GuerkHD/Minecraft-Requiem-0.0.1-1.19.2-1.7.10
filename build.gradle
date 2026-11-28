@@ -3,10 +3,10 @@ plugins {
     id 'com.gtnewhorizons.retrofuturagradle' version '1.4.9'
 }
 
-version = '0.2.0-1.7.10'
-group = 'net.guerkhd.guerk'
+version = '0.3.0-1.7.10'
+group = 'net.guerkhd.gastrolithicguerk'
 base {
-    archivesName = 'guerk'
+    archivesName = 'gastrolithicguerk'
 }
 
 // Minecraft 1.7.10 runs on Java 8, so the mod is compiled for Java 8.

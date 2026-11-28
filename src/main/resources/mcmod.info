@@ -1,7 +1,7 @@
 [
 {
-  "modid": "guerk",
-  "name": "Guerk",
+  "modid": "gastrolithicguerk",
+  "name": "Gastrolithic Guerk",
   "description": "An edible ore, food themed tools and support for other mods' machines.",
   "version": "${version}",
   "mcversion": "${mcversion}",
