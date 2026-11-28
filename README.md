@@ -1,3 +1,6 @@
+> **This branch is obsolete and can be deleted.** The mod is called Gastrolithic Guerk now and lives on
+> [`claude/gastrolithic-guerk-1.7.10`](https://github.com/GuerkHD/Minecraft-Requiem-0.0.1-1.19.2-1.7.10/tree/claude/gastrolithic-guerk-1.7.10), which contains everything that is here.
+
 This mod adds two things.
 
 1. A new ore which ties in to the food system, by being edible, making other things edible and introducing tools, realated to hunger and food.
