@@ -19,8 +19,4 @@ plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
 }
 
-rootProject.name = 'minecraftrequiem'
-
-// Two independent mods: each one builds its own jar.
-include 'guerk'
-include 'stands'
+rootProject.name = 'guerk'

@@ -20,7 +20,7 @@ from PIL import Image
 # Dark to bright, as in textures/items/guerk_ingot.png.
 GUERK = ['#660066', '#800080', '#BE29EC', '#D896FF', '#EFBBFF']
 
-TEXTURES = 'guerk/src/main/resources/assets/guerk/textures'
+TEXTURES = 'src/main/resources/assets/guerk/textures'
 # Guerk textures added with the port. Add new ones here; other pixels in them (stone, sticks, ...) aren't touched.
 GUERK_TEXTURES = ['blocks/molten_guerk_still.png', 'blocks/molten_guerk_flow.png']
 # Pixels further away than this (CIELAB delta E) from every palette color aren't Guerk (e.g. white highlights).
