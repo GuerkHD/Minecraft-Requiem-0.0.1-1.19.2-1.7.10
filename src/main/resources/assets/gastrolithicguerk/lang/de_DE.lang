@@ -2,11 +2,11 @@ item.gastrolithicguerk.guerk_ingot.name=Guerkbarren
 item.gastrolithicguerk.raw_guerk.name=Rohguerk
 item.gastrolithicguerk.guerk_nugget.name=Guerkklumpen
 
-item.gastrolithicguerk.guerk_sword.name=Guerk Schwert
-item.gastrolithicguerk.guerk_pickaxe.name=Guerk Spitzhacke
-item.gastrolithicguerk.guerk_axe.name=Guerk Axt
-item.gastrolithicguerk.guerk_shovel.name=Guerk Schaufel
-item.gastrolithicguerk.guerk_hoe.name=Guerk Hacke
+item.gastrolithicguerk.guerk_sword.name=Guerkschwert
+item.gastrolithicguerk.guerk_pickaxe.name=Guerkspitzhacke
+item.gastrolithicguerk.guerk_axe.name=Guerkaxt
+item.gastrolithicguerk.guerk_shovel.name=Guerkschaufel
+item.gastrolithicguerk.guerk_hoe.name=Guerkhacke
 
 tile.gastrolithicguerk.guerk_block.name=Guerkblock
 tile.gastrolithicguerk.guerk_ore.name=Guerkerz
