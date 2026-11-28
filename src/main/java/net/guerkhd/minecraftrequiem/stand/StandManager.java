@@ -1,14 +1,14 @@
 package net.guerkhd.minecraftrequiem.stand;
 
 import net.guerkhd.minecraftrequiem.entity.EntityStand;
+import net.guerkhd.minecraftrequiem.networking.ModMessages;
+import net.guerkhd.minecraftrequiem.networking.packet.StandFeedbackS2CPacket;
 import net.guerkhd.minecraftrequiem.sound.ModSounds;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -21,6 +21,9 @@ import net.minecraft.world.storage.WorldInfo;
  */
 public class StandManager
 {
+    /** Damage the Stand Remover Arrow deals when it takes the stand: 2 hearts. */
+    private static final float REMOVER_DAMAGE = 4f;
+
     /**
      * Summon key: summons or unsummons the stand.
      */
@@ -46,7 +49,7 @@ public class StandManager
 
             deactivate(level, player, stand, false);
         }
-        else player.addChatMessage(new ChatComponentText("Skill issue."));
+        // Without a stand the key does nothing.
     }
 
     /**
@@ -82,10 +85,9 @@ public class StandManager
             stand.setStandID(level.rand.nextInt(StandType.STAND_COUNT));
             stand.sync();
 
-            StandType standType = stand.getStandType();
-            ChatComponentText message = new ChatComponentText(standType.getAwakeningName());
-            message.getChatStyle().setBold(true).setColor(standType.getColor());
-            player.addChatMessage(message);
+            // Instead of the stand's name in chat (1.19): a menacing "go go go" in the middle of the screen.
+            // Which stand it is shows once it's summoned.
+            ModMessages.sendToPlayer(new StandFeedbackS2CPacket(StandFeedbackS2CPacket.AWAKENED), player);
         }
     }
 
@@ -109,9 +111,8 @@ public class StandManager
             stand.setBomb(false);
             stand.sync();
 
-            ChatComponentTranslation message = new ChatComponentTranslation("message.minecraftrequiem.stand_remover_message");
-            message.getChatStyle().setItalic(true).setColor(EnumChatFormatting.GRAY);
-            player.addChatMessage(message);
+            // No chat message anymore: the sound and a bit of magic damage say enough.
+            player.attackEntityFrom(DamageSource.magic, REMOVER_DAMAGE);
             return true;
         }
         return false;
@@ -163,6 +164,15 @@ public class StandManager
     public static void playSound(World level, EntityPlayerMP player, String sound, float volume)
     {
         level.playSoundEffect(player.posX, player.posY, player.posZ, sound, volume, level.rand.nextFloat() * 0.1f + 0.9f);
+    }
+
+    /**
+     * Not enough food for the ability: a burp, and the cost in the player's HUD flashes red.
+     */
+    public static void abilityFailed(World level, EntityPlayerMP player)
+    {
+        playSound(level, player, ModSounds.PLAYER_BURP, 1f);
+        ModMessages.sendToPlayer(new StandFeedbackS2CPacket(StandFeedbackS2CPacket.ABILITY_FAILED), player);
     }
 
     /**

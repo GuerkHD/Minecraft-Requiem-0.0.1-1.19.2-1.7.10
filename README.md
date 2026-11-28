@@ -87,6 +87,19 @@ None of these are required; each integration only runs if the mod is installed.
 
 The Tinkers' material ID (default 218) can be changed in `config/minecraftrequiem-common.cfg` if it clashes with another addon.
 
+### Stand HUD and feedback
+
+- The chat stays free. Getting a stand shows a menacing ゴゴゴ in the middle of the screen, in the new stand's color;
+  which stand it is shows once it's summoned. The Stand Remover Arrow takes the stand with a sound and 2 hearts of
+  magic damage. Without a stand, the summon key does nothing (1.19 wrote "Skill issue." into the chat).
+- While a stand is summoned, the top left corner shows its head, its name and what the ability key costs, as hunger
+  shanks. They turn grey while there isn't enough food and flash red when the ability fails for that reason.
+  The costs are the server's, not the ones in the client's own config.
+- Stands are drawn half transparent and, like in the series, only for players who have a stand themselves.
+  Both can be changed in `config/minecraftrequiem-common.cfg`, category `stands`: `onlyStandUsersSeeStands` on the
+  server (it's sent to every client that joins), `standOpacity` on each client (1.0 = solid).
+- Green Day's effect shows green particles.
+
 Some 1.19 bugs were fixed along the way:
 
 - The stand is kept on death now (the 1.19 version copied the data from the old player onto itself).
@@ -101,8 +114,8 @@ Some 1.19 bugs were fixed along the way:
 - Killer Queen: if the bombed target dies, despawns or gets out of range, a new bomb can be placed right away.
   In 1.19 the bomb stayed marked as placed until it was detonated into nothing, which cost food.
   Losing the stand to the Remover Arrow now also defuses its bombs; in 1.19 they and Sheer Heart Attack stayed forever.
-- Time Stop (The World) holds entities in place. 1.19 teleported them to where they were every tick, so they kept
-  creeping along at about half speed and slowly fell out of the air.
+- Time Stop (The World) holds entities in place. 1.19 only teleported them to wherever they currently were and cleared
+  their speed every tick, so mobs that were following a path kept sliding along it slowly.
 - King Crimson's time skip lands 1.5 blocks behind the attacker even if it looks down. In 1.19 the distance shrank
   with the attacker's view angle, down to landing inside it.
 - Green Day only ends its own poison when going back up (1.19 removed any poison), and a deeper fall makes the poison

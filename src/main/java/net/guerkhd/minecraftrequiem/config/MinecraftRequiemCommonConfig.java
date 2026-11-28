@@ -12,6 +12,7 @@ public class MinecraftRequiemCommonConfig
     private static final String ORE = "guerk_ore_spawn";
     private static final String POTIONS = "potion_ids";
     private static final String COMPAT = "mod_compatibility";
+    private static final String STANDS = "stands";
 
     private static final String[] BLOCK_INTERACTIONS = {"NONE", "BREAK", "DESTROY"};
 
@@ -41,6 +42,9 @@ public class MinecraftRequiemCommonConfig
     public static int LEVITATION_ID = 76;
 
     public static int TINKERS_MATERIAL_ID = 218;
+
+    public static boolean ONLY_STAND_USERS_SEE_STANDS = true;
+    public static float STAND_OPACITY = 0.5f;
 
     public static void load(File file)
     {
@@ -80,6 +84,12 @@ public class MinecraftRequiemCommonConfig
         CONSTIPATION_ID = config.getInt("constipation", POTIONS, 75, 24, 127, "");
         LEVITATION_ID = config.getInt("levitation", POTIONS, 76, 24, 127,
                 "Levitation does not exist in 1.7.10, so C-Moon brings its own.");
+
+        config.setCategoryComment(STANDS, "How stands are shown");
+        ONLY_STAND_USERS_SEE_STANDS = config.getBoolean("onlyStandUsersSeeStands", STANDS, true,
+                "Server setting: players without a stand can't see stands, like in the series. The server sends it to every client that joins.");
+        STAND_OPACITY = (float) config.get(STANDS, "standOpacity", 0.5,
+                "Client setting: how solid stands are drawn. 1.0 = solid, 0.5 = half transparent.", 0.1, 1.0).getDouble(0.5);
 
         config.setCategoryComment(COMPAT, "Settings for other mods");
         TINKERS_MATERIAL_ID = config.getInt("tinkersMaterialId", COMPAT, 218, 0, 32767,

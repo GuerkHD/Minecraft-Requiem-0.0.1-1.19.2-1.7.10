@@ -8,6 +8,8 @@ import net.guerkhd.minecraftrequiem.effect.ModEffects;
 import net.guerkhd.minecraftrequiem.effect.ModPotion;
 import net.guerkhd.minecraftrequiem.entity.EntityStand;
 import net.guerkhd.minecraftrequiem.item.ModItems;
+import net.guerkhd.minecraftrequiem.networking.ModMessages;
+import net.guerkhd.minecraftrequiem.networking.packet.StandSettingsS2CPacket;
 import net.guerkhd.minecraftrequiem.sound.ModSounds;
 import net.guerkhd.minecraftrequiem.stand.PlayerStand;
 import net.guerkhd.minecraftrequiem.stand.StandManager;
@@ -66,8 +68,10 @@ public class ModEvents
     {
         if(!event.world.isRemote && event.entity instanceof EntityPlayerMP)
         {
-            PlayerStand stand = PlayerStand.get((EntityPlayerMP) event.entity);
+            EntityPlayerMP player = (EntityPlayerMP) event.entity;
+            PlayerStand stand = PlayerStand.get(player);
             if(stand != null) stand.sync();
+            ModMessages.sendToPlayer(StandSettingsS2CPacket.fromConfig(), player);
         }
     }
 
@@ -181,7 +185,7 @@ public class ModEvents
         }
         else
         {
-            StandManager.playSound(entity.worldObj, player, ModSounds.PLAYER_BURP, 1f);
+            StandManager.abilityFailed(entity.worldObj, player);
         }
     }
 

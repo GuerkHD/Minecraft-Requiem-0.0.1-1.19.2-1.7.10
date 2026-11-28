@@ -70,7 +70,8 @@ public class ModTickEvents
         {
             int duration = effect.getDuration();
             player.removePotionEffect(ModEffects.GREEN_DAY.id);
-            player.addPotionEffect(new PotionEffect(ModEffects.GREEN_DAY.id, duration, amplifier, true));
+            // Not ambient: the green particles stay as visible as when Green Day first hit.
+            player.addPotionEffect(new PotionEffect(ModEffects.GREEN_DAY.id, duration, amplifier, false));
         }
     }
 

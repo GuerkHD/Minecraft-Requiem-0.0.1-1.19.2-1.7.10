@@ -1,5 +1,12 @@
 package net.guerkhd.minecraftrequiem.client;
 
+import net.guerkhd.minecraftrequiem.config.MinecraftRequiemCommonConfig;
+import net.guerkhd.minecraftrequiem.stand.StandType;
+
+/**
+ * What the client knows about its player's stand, plus the server settings the HUD and the stand renderer need.
+ * No client-only classes in here: the packet handlers that fill it are loaded on the server too.
+ */
 public class ClientStandData
 {
     private static boolean standUser;
@@ -7,6 +14,14 @@ public class ClientStandData
     private static int standID;
     private static boolean bomb;
     private static double maxY;
+
+    // Until the server has sent its own: this installation's config.
+    private static int[] costs = StandType.configCosts();
+    private static boolean onlyUsersSeeStands = MinecraftRequiemCommonConfig.ONLY_STAND_USERS_SEE_STANDS;
+
+    // System.currentTimeMillis() of the last awakening and the last failed ability, 0 = never.
+    private static long awakenedAt;
+    private static long abilityFailedAt;
     //ID 0 = The World
     //ID 1 = D4C
     //ID 2 = Magicians Red
@@ -61,5 +76,41 @@ public class ClientStandData
     public static void setMaxY(double maxY)
     {
         ClientStandData.maxY = maxY;
+    }
+
+    public static int[] getCosts()
+    {
+        return costs;
+    }
+
+    public static boolean getOnlyUsersSeeStands()
+    {
+        return onlyUsersSeeStands;
+    }
+
+    public static void setServerSettings(int[] costs, boolean onlyUsersSeeStands)
+    {
+        ClientStandData.costs = costs;
+        ClientStandData.onlyUsersSeeStands = onlyUsersSeeStands;
+    }
+
+    public static long getAwakenedAt()
+    {
+        return awakenedAt;
+    }
+
+    public static void awakened()
+    {
+        awakenedAt = System.currentTimeMillis();
+    }
+
+    public static long getAbilityFailedAt()
+    {
+        return abilityFailedAt;
+    }
+
+    public static void abilityFailed()
+    {
+        abilityFailedAt = System.currentTimeMillis();
     }
 }

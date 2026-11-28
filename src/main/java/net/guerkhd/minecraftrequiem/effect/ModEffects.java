@@ -35,13 +35,16 @@ public class ModEffects
      */
     private static final int NO_PARTICLES = 0;
 
+    /** Green Day's mold shows: green swirls, in Green Day's HUD color (dark green). */
+    private static final int GREEN_DAY_PARTICLES = 0x00AA00;
+
     public static void register()
     {
         extendPotionArray(MAX_POTION_ID + 1);
 
         TIME_STOP = add(new TimeStopEffect(id(MinecraftRequiemCommonConfig.TIME_STOP_ID, "time_stop"), true, NO_PARTICLES));
         BOMB = add(new BombEffect(id(MinecraftRequiemCommonConfig.BOMB_ID, "bomb"), true, NO_PARTICLES));
-        GREEN_DAY = add(new GreenDayEffect(id(MinecraftRequiemCommonConfig.GREEN_DAY_ID, "green_day"), true, NO_PARTICLES));
+        GREEN_DAY = add(new GreenDayEffect(id(MinecraftRequiemCommonConfig.GREEN_DAY_ID, "green_day"), true, GREEN_DAY_PARTICLES));
         THREE_FREEZE = add(new ThreeFreezeEffect(id(MinecraftRequiemCommonConfig.THREE_FREEZE_ID, "three_freeze"), true, NO_PARTICLES));
         EPITAPH = add(new KCEffect(id(MinecraftRequiemCommonConfig.EPITAPH_ID, "epitaph"), false, NO_PARTICLES, "epitaph"));
         // Harmful: 1.19 registered it as beneficial by mistake (copied from Epitaph). Mods that cure bad effects check this.

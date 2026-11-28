@@ -1,5 +1,6 @@
 package net.guerkhd.minecraftrequiem.entity;
 
+import net.guerkhd.minecraftrequiem.config.MinecraftRequiemCommonConfig;
 import net.guerkhd.minecraftrequiem.stand.PlayerStand;
 import net.guerkhd.minecraftrequiem.stand.StandType;
 import net.minecraft.block.Block;
@@ -159,6 +160,16 @@ public class EntityStand extends EntityLiving
     public boolean isEntityInvulnerable()
     {
         return true;
+    }
+
+    /**
+     * A see-through stand is drawn in Forge's second entity pass, after water and glass. In the first pass it would hide
+     * the water behind it, because its depth is already written when the water is drawn.
+     */
+    @Override
+    public boolean shouldRenderInPass(int pass)
+    {
+        return pass == (MinecraftRequiemCommonConfig.STAND_OPACITY < 1f ? 1 : 0);
     }
 
     @Override

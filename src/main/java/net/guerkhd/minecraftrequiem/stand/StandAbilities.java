@@ -236,14 +236,18 @@ public class StandAbilities
 
     private static void standSound(WorldServer level, EntityPlayerMP player, StandType standType, boolean success)
     {
-        String sound = sound(standType, success);
+        if(!success)
+        {
+            StandManager.abilityFailed(level, player);
+            return;
+        }
+
+        String sound = sound(standType);
         if(sound != null) StandManager.playSound(level, player, sound, 1f);
     }
 
-    private static String sound(StandType standType, boolean success)
+    private static String sound(StandType standType)
     {
-        if(!success) return ModSounds.PLAYER_BURP;
-
         switch(standType)
         {
             case THE_WORLD: return ModSounds.ZA_WARUDO;
