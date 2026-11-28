@@ -1,16 +1,21 @@
 This mod adds two things.
 
-1. A new ore which ties in to the food system, by being edible, making other things edible and introducing tools, realated to hunger and food.
-2. The possibility to optain and use a small selection of stand abilitys from the popular animanga series JoJo's Bizarre Adventure.
+1. A new ore which ties in to the food system, by being edible, making other things edible and introducing tools, related to hunger and food.
+2. The possibility to obtain and use a small selection of stand abilities from the popular animanga series JoJo's Bizarre Adventure.
 
-These both tie in together, because the stands use food and hunger as their main resources for their abilities. The new ore and it's corresponding items help with that. 
+These both tie in together, because the stands use food and hunger as their main resources for their abilities. The new ore and its corresponding items help with that. 
 
-I created this mod as a fun little add-on to a modpack I'm going to play with friends and to start to learning modding in general. Don't take it to serious.
+I created this mod as a fun little add-on to a modpack I'm going to play with friends and to start learning modding in general. Don't take it too seriously.
 
 ## Minecraft 1.7.10
 
 This branch is a port of the 1.19.2 version (`1.0.2-1.19.2`) to Minecraft 1.7.10 / Forge 10.13.4.1614.
 The 1.7.10 version has its own version numbers, starting at 0.0.1 for the plain port.
+
+This is the combined version: Guerk and the stands in one mod, as in 1.19. The two parts are developed further as
+separate mods on their own branches, [Gastrolithic Guerk](https://github.com/GuerkHD/Minecraft-Requiem-0.0.1-1.19.2-1.7.10/tree/claude/gastrolithic-guerk-1.7.10)
+and [Minecraft Requiem](https://github.com/GuerkHD/Minecraft-Requiem-0.0.1-1.19.2-1.7.10/tree/claude/minecraft-requiem-1.7.10).
+This branch has the same content and fixes as of 0.1.1 (November 2026) and is only updated now and then.
 
 ### Building
 
@@ -18,7 +23,7 @@ The 1.7.10 version has its own version numbers, starting at 0.0.1 for the plain 
 ./gradlew build
 ```
 
-The mod jar ends up in `build/libs/minecraftrequien-0.1.0-1.7.10.jar` (the `-dev` jar is for development only).
+The mod jar ends up in `build/libs/minecraftrequiem-0.1.1-1.7.10.jar` (the `-dev` jar is for development only).
 The build uses [RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle), so a current Gradle works.
 Minecraft 1.7.10 needs Java 8; Gradle downloads a Java 8 JDK by itself if none is installed.
 

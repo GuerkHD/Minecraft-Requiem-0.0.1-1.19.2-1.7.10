@@ -109,7 +109,7 @@ public class StandManager
             stand.setBomb(false);
             stand.sync();
 
-            ChatComponentTranslation message = new ChatComponentTranslation("message.minecraftrequiem.stand_remover_messeage");
+            ChatComponentTranslation message = new ChatComponentTranslation("message.minecraftrequiem.stand_remover_message");
             message.getChatStyle().setItalic(true).setColor(EnumChatFormatting.GRAY);
             player.addChatMessage(message);
             return true;

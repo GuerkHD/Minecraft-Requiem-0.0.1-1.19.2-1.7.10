@@ -29,7 +29,7 @@ public class MinecraftRequiem
 {
     public static final String MOD_ID = "minecraftrequiem";
     public static final String MOD_NAME = "Minecraft Requiem";
-    public static final String VERSION = "0.1.0-1.7.10";
+    public static final String VERSION = "0.1.1-1.7.10";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     @Mod.Instance(MOD_ID)
