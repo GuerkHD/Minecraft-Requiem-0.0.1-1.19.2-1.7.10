@@ -23,8 +23,7 @@ This branch has the same content and fixes as of 0.1.1 (November 2026) and is on
 ./gradlew build
 ```
 
-The mod jar ends up in `build/libs/requiemcraft-0.1.1-1.7.10.jar`, named after the CurseForge project
-[RequiemCraft](https://www.curseforge.com/minecraft/mc-mods/requiemcraft) (the `-dev` jar is for development only).
+The mod jar ends up in `build/libs/minecraftrequiem-0.1.1-1.7.10.jar` (the `-dev` jar is for development only).
 The build uses [RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle), so a current Gradle works.
 Minecraft 1.7.10 needs Java 8; Gradle downloads a Java 8 JDK by itself if none is installed.
 
