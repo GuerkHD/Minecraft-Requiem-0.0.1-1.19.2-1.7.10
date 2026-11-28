@@ -11,7 +11,7 @@ I created this mod as a fun little add-on to a modpack I'm going to play with fr
 
 This branch is Gastrolithic Guerk, the Guerk part of the 1.19.2 version (`1.0.2-1.19.2`), ported to Minecraft 1.7.10 / Forge 10.13.4.1614:
 Guerk Ore, Raw Guerk, ingot, nugget, block, tools, Food Leech, Constipation and the support for other mods (mod ID `gastrolithicguerk`).
-The stands are their own mod, Minecraft Requiem, on the branch `claude/stands-1.7.10`. Each mod works without the
+The stands are their own mod, Minecraft Requiem, on the branch `claude/minecraft-requiem-1.7.10`. Each mod works without the
 other; together they behave like the 1.19 mod.
 
 The items use the mod ID `gastrolithicguerk` (e.g. `gastrolithicguerk:guerk_ingot`). Earlier 1.7.10 versions had them under
