@@ -239,8 +239,9 @@ def front_view(img, back=False):
 # --- Sheer Heart Attack: a small tank with a skull on the front, see ModelSheerHeartAttack ---
 def make_sheer_heart_attack():
     img = Image.new('RGBA', (64, 32), (0, 0, 0, 0))
-    pal = {'S': '#B9BEC6', 's': '#DDE1E6', 'd': '#7D848F', 'T': '#3A3A3E', 't': '#5A5A60', 'W': '#F2EFE6',
-           'k': '#141414', 'R': '#C0392B'}
+    # Body blue with a green tint, white skull, orange-brown knob on the back.
+    pal = {'S': '#5B8C99', 's': '#7FAEBA', 'd': '#3F6772', 'T': '#3A3A3E', 't': '#5A5A60', 'W': '#F2EFE6',
+           'k': '#141414', 'O': '#C47A32', 'o': '#8E5526'}
     p = Painter(img, pal, 4711)
     # Hull: addBox(-3, 18, -3, 6, 4, 7) at (0, 0)
     p.box(0, 0, 6, 4, 7, 'S', 'd', ['SSSSSSS', 'sSSSSSS', 'SSSSSSS', 'ddddddd'], ['SSSSSS', 'SssssS', 'SSSSSS', 'dddddd'],
@@ -252,8 +253,8 @@ def make_sheer_heart_attack():
     # Tracks: addBox(-4.5, 20, -4, 2, 4, 8) at (26, 8), the other one mirrored
     track_side = ['TtTtTtTt', 'tTTTTTTt', 'tTTTTTTt', 'TtTtTtTt']
     p.box(26, 8, 2, 4, 8, ['TT', 'tt'] * 4, ['TT', 'tt'] * 4, track_side, ['tt', 'TT', 'TT', 'tt'], track_side, ['tt', 'TT', 'TT', 'tt'])
-    # Antenna with a red tip: addBox(1.5, 13, 1, 1, 3, 1) at (50, 0)
-    p.box(50, 0, 1, 3, 1, 'R', 'd', ['R', 'd', 'd'], ['R', 'd', 'd'], ['R', 'd', 'd'], ['R', 'd', 'd'])
+    # Knob on the back: addBox(1.5, 13, 1, 1, 3, 1) at (50, 0)
+    p.box(50, 0, 1, 3, 1, 'O', 'o', ['O', 'O', 'o'], ['O', 'O', 'o'], ['O', 'O', 'o'], ['O', 'O', 'o'])
     img.save(f'{OUT}/sheer_heart_attack.png')
     return img
 

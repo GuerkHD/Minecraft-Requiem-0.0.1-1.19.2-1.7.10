@@ -7,7 +7,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 /**
- * Sheer Heart Attack as in the series: a small tank with a skull on the front, a dome and tracks.
+ * Sheer Heart Attack as in the series: a small tank with a skull on the front, a dome, tracks and a knob on the back.
  * Living entity models are drawn with y = 24 at the ground; the front faces -z.
  */
 @SideOnly(Side.CLIENT)
@@ -18,7 +18,7 @@ public class ModelSheerHeartAttack extends ModelBase
     private final ModelRenderer skull;
     private final ModelRenderer leftTrack;
     private final ModelRenderer rightTrack;
-    private final ModelRenderer antenna;
+    private final ModelRenderer knob;
 
     public ModelSheerHeartAttack()
     {
@@ -30,7 +30,7 @@ public class ModelSheerHeartAttack extends ModelBase
         skull = part(26, 0, -2, 17, -4, 4, 4, 1, false);
         leftTrack = part(26, 8, 3, 20, -4, 2, 4, 8, false);
         rightTrack = part(26, 8, -5, 20, -4, 2, 4, 8, true);
-        antenna = part(50, 0, 1.5F, 13, 1, 1, 3, 1, false);
+        knob = part(50, 0, 1.5F, 13, 1, 1, 3, 1, false);
     }
 
     private ModelRenderer part(int u, int v, float x, float y, float z, int w, int h, int d, boolean mirror)
@@ -49,6 +49,6 @@ public class ModelSheerHeartAttack extends ModelBase
         skull.render(scale);
         leftTrack.render(scale);
         rightTrack.render(scale);
-        antenna.render(scale);
+        knob.render(scale);
     }
 }
