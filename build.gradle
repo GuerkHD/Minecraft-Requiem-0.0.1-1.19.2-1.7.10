@@ -1,4 +1,40 @@
 plugins {
-    // Applied in the two mod projects, see gradle/mod.gradle.
-    id 'com.gtnewhorizons.retrofuturagradle' version '1.4.9' apply false
+    id 'java-library'
+    id 'com.gtnewhorizons.retrofuturagradle' version '1.4.9'
+}
+
+version = '0.2.0-1.7.10'
+group = 'net.guerkhd.minecraftrequiem'
+base {
+    archivesName = 'minecraftrequiem'
+}
+
+// Minecraft 1.7.10 runs on Java 8, so the mod is compiled for Java 8.
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
+minecraft {
+    mcVersion = '1.7.10'
+    username = 'Developer'
+}
+
+repositories {
+    mavenCentral()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+processResources {
+    // Read the version now: using the project inside the task action is deprecated in Gradle 8 and fails in Gradle 10.
+    def modVersion = project.version
+    inputs.property 'version', modVersion
+    inputs.property 'mcversion', '1.7.10'
+    filesMatching('mcmod.info') {
+        expand('version': modVersion, 'mcversion': '1.7.10')
+    }
 }

@@ -3,7 +3,7 @@ Generates the stand skins (64x64: classic 64x32 biped layout on top, extra model
 Sheer Heart Attack texture, plus preview sheets.
 
 usage: python3 tools/stand_textures.py src/main/resources/assets/minecraftrequiem/textures/entity <preview dir>
-(on the split branch: stands/src/main/resources/...). Needs Pillow. Each stand is a palette plus small pixel grids.
+Needs Pillow. Each stand is a palette plus small pixel grids.
 """
 import random
 import sys

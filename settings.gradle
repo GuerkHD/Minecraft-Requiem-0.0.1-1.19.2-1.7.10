@@ -20,7 +20,3 @@ plugins {
 }
 
 rootProject.name = 'minecraftrequiem'
-
-// Two independent mods: each one builds its own jar.
-include 'guerk'
-include 'stands'
