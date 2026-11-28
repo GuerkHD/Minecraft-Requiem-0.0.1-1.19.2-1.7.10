@@ -11,7 +11,8 @@ I created this mod as a fun little add-on to a modpack I'm going to play with fr
 
 This branch is the stand part of the 1.19.2 version (`1.0.2-1.19.2`), ported to Minecraft 1.7.10 / Forge 10.13.4.1614:
 the stands, the arrows and Gold Infused Obsidian, which is only used for the arrow tips (mod ID `minecraftrequiem`).
-Guerk is its own mod on the branch `claude/guerk-1.7.10`. Each mod works without the other; together they behave like
+Gastrolithic Guerk (the Guerk ore, items and tools) is its own mod on the branch
+`claude/gastrolithic-guerk-1.7.10`. Each mod works without the other; together they behave like
 the 1.19 mod.
 
 ### Building
